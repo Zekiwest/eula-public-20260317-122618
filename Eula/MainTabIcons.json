@@ -1,0 +1,30 @@
+{
+  "tabs": {
+    "home": {
+      "off": "tab_home_off",
+      "on": "tab_home_on",
+      "offSize": 40,
+      "onSize": 68
+    },
+    "shorts": {
+      "off": "tab_shorts_off",
+      "on": "tab_shorts_on",
+      "offSize": 40,
+      "onSize": 68
+    },
+    "messages": {
+      "off": "tab_message_off",
+      "on": "tab_message_on",
+      "offSize": 40,
+      "onSize": 68
+    },
+    "profile": {
+      "off": "tab_profile_off",
+      "on": "tab_profile_on",
+      "offSize": 40,
+      "onSize": 68
+    }
+  },
+  "add": "tab_add",
+  "addSize": 40
+}

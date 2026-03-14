@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Notable-Regular.ttf</string>
+	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We use the microphone to record voice messages.</string>
+	<key>SUPABASE_URL</key>
+	<string>https://luaqfryxwaciqezgfgqm.supabase.co</string>
+	<key>SUPABASE_ANON_KEY</key>
+	<string>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1YXFmcnl4d2FjaXFlemdmZ3FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYzODA4MDEsImV4cCI6MjA4MTk1NjgwMX0.gliEd8kAC9Yg3atpKkwG1X7VSW6AWK-gGbr_VnVtfrI</string>
+	<key>CHAT_MESSAGE_COST_COINS</key>
+	<integer>30</integer>
+	<key>TRENDTAILOR_MESSAGE_COST_COINS</key>
+	<integer>10</integer>
+</dict>
+</plist>

@@ -1,0 +1,810 @@
+{
+  "version": 1,
+  "skills": {
+    "axiom-accessibility-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "fe24e7f34b935b3bfdfbd2e948f2abc831ac06627a9ce2bd09dec5f7f8fae2ee"
+    },
+    "axiom-alarmkit-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "25745822f9f769fa872eb28afead632b02fe26f7ff2d2e7c5a40c854528bdc16"
+    },
+    "axiom-app-composition": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "1473921e66ea3e41e0b9a1876e52379ee07ba657ca4f2b08845e8f633be20ede"
+    },
+    "axiom-app-discoverability": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "d8b5ba53e2555e180951c4f667de31e8d4ef47c2cc23566c334b50f5e6a44d26"
+    },
+    "axiom-app-intents-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "0cfbd0c3d62415ef2b2ac6b337a63e2a4aa87e175eefb9a0be1ab37352dfefbc"
+    },
+    "axiom-app-shortcuts-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "f09cec88e8554195135fd66dec4c679a2bef3d128225b9e17ceb652b01703cc7"
+    },
+    "axiom-app-store-connect-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "511598032390a366f2036f9d863925aeddc15579cb4ccfd2f9b14159a2f7b72d"
+    },
+    "axiom-app-store-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "17ad1c9e5d427bb5a185fc7b28c2691c6e4304e439a88c6f55dcc51950f4ebad"
+    },
+    "axiom-app-store-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "55a71955db236e07ea82b5cf47d09369c6c70752b3aa510ecadf829643d788fc"
+    },
+    "axiom-app-store-submission": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "0e70baab2cb0cd44fe7b98577bd135ba2c1ced4939190efa131a88cc723994e2"
+    },
+    "axiom-apple-docs": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "e698a3ebd1c32487e21cb8a4cf512f9d84b004c0b9a91db68384064ecf913ab0"
+    },
+    "axiom-apple-docs-research": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "72a04236e00d7cc94ef3bf00819256f6cc5f33e878d4ff7016690bab724d8e69"
+    },
+    "axiom-asc-mcp": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "4b065d97b376fd7baaf513dea87dbab3c85c3c2ea205d9b0331790db23563e7f"
+    },
+    "axiom-assume-isolated": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "8645fb1408b602eb384efaf6e279ac79992d915f73bc4e6c033ed960391cd360"
+    },
+    "axiom-auto-layout-debugging": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "311b1ff702e73dea8bc01b51bb21572bd533223d67ad67350a0f33c7d42527d9"
+    },
+    "axiom-avfoundation-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "d865e0005d311afd7be360accb0ec29d5997ea45c9087ae7499891fa3815fbca"
+    },
+    "axiom-axe-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "62fdaba0e973be27bbe4aae70be2f101388a635fbffb5b2102fb60b9455e3654"
+    },
+    "axiom-background-processing": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "416a191433c5ca4678d774f5dc73b900e92c9e9fed264031eb63bea981ead97b"
+    },
+    "axiom-background-processing-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "f5221622103fca0c05290192582a1dcaf4b92b76edccceca85e6e039a109a568"
+    },
+    "axiom-background-processing-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "b1f4966136229aa770459dc17f0116bc7dd951873ef4fd6e07d62cd93cad497c"
+    },
+    "axiom-build-debugging": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "3e337d1674a8a414deadc6e4d076c1370780848cfd3afbdc559af120fb5ce22e"
+    },
+    "axiom-build-performance": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "bf63ddb160993ad949b03bacc09a199e8afec242a7f61848d3dc48ec8500b8e4"
+    },
+    "axiom-camera-capture": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "f768367f875ddf3cadf143411f67b10fe59495cebb3c5687840ad2d1e4ab19e1"
+    },
+    "axiom-camera-capture-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "40248da15fc036401756bb5c39f2bbf73df42e51875651ace73112c2722a9b0b"
+    },
+    "axiom-camera-capture-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "79186b6701c98f25bd13a45e4490c0ee8ae1f8b31aca94d58080f5d7040b2be8"
+    },
+    "axiom-cloud-sync": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "b8c3a4884d0bcc5866e1409c1ae5ebcd59302e80aa6828168ab9043d7a1717e0"
+    },
+    "axiom-cloud-sync-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "5616a48d0f025921723ed5ef87628b1c8b1fc7b25184e190b79e4de1a12e7e00"
+    },
+    "axiom-cloudkit-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "3533049ccaa76ce2a2093517122d31c5527cc6f401c9285bed17aa6ba926b58a"
+    },
+    "axiom-codable": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "cfe00f177e7932fb60c04aaf40efd7bc2fcc93e32d2d897009c126549cc72314"
+    },
+    "axiom-concurrency-profiling": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "edea50f70490c1c6f0706e29484e4844738a682500e93a67dc073be5ca8209ed"
+    },
+    "axiom-core-data": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "90060b34c31d93d00d3673525cea1e54773ee1db75e935e351baf353b49d9b48"
+    },
+    "axiom-core-data-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "bc233f3f1b0b7a6218b8beae714854edb42f2f3ded0d8cd0f2fca194a3225860"
+    },
+    "axiom-core-location": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "75cc6706cfab11e61d6453d0de8200ff49fdb6e8da24db1fc767bb4f242b1ee4"
+    },
+    "axiom-core-location-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "5b3932e6ebdce75baa253236aff6f6a32c0eadddc80a7227f2874efb1e2c0e81"
+    },
+    "axiom-core-location-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "f1f026e9d9c2f7a10747581c2fef089c3b48cb435531daa73391beb851f67578"
+    },
+    "axiom-core-spotlight-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "524777fa9423d1c30dcde3e0d1886bfa127931a336729a5a13f366192687c0e1"
+    },
+    "axiom-database-migration": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "ad899efbee93eadb675db6e7bb1ca54b47fc5311e9faa2b3adb6c195f16bf7b6"
+    },
+    "axiom-deep-link-debugging": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "ccea6d9da0b6f12308467dced027f9fd10b41d5083909ef2201e10a49ab9a50f"
+    },
+    "axiom-display-performance": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "993aa48bb5ff1ca4eb495c474da9e5a9dc28504fb491bdc6beca6bcada958220"
+    },
+    "axiom-energy": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "3594242d671c2d3b8251e138e2c384197e144b063990ff2c4ff124fcb1ce0f71"
+    },
+    "axiom-energy-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "a17b263b0fec8602bc879488dd38b51cf87b819cb23ac0b80cbfe59a66077e4d"
+    },
+    "axiom-energy-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "11774087275b221821d20cbcfc9ac9dd753cbc17da57f171676e0ac29e1f6dea"
+    },
+    "axiom-extensions-widgets": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "58f28c56bb3da8b8fc5ddbaf82d2ee600d99fa02bbb894ab161304315fc88c97"
+    },
+    "axiom-extensions-widgets-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "c5e76eae973db97a0298281597c7409a13e01ad2f2c85fc3077bebd9bfa82f64"
+    },
+    "axiom-file-protection-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "8605e4f6f6f37877ff866d8b013c3c83ff0398842d5ded3c698c8c34ef4076fc"
+    },
+    "axiom-foundation-models": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "4c72077dbb62a3e4c9883fe90e13522b1cdf6c1b3f94c6f2560b5420205f5244"
+    },
+    "axiom-foundation-models-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "9c3d1442f4726c1990697a8a0b78eae299ac949665811a92f9eb71df5b5481b6"
+    },
+    "axiom-foundation-models-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "77446c14b4f6ef8dd94b85f8c7a952811c86da550bbfaadb1662e9bc95ce9dee"
+    },
+    "axiom-getting-started": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "327244dc1a2bc92a74de9b3e5e557b6b66102de57eefc67430af62dbbee84e72"
+    },
+    "axiom-grdb": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "4a21c5cc64ab99cc18f3b40e2c8047a9f4f9a227c9ed2e6cf9bc1590aec8ccf4"
+    },
+    "axiom-hang-diagnostics": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "1124c3ebd4f1c0038e942c19223118171585702ca988e8ede011c10e5c9afdfb"
+    },
+    "axiom-haptics": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "e90bba3bece890c06226dd8f041bed852702913644c482a34243006bcf54e277"
+    },
+    "axiom-hig": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "1bd0f729770f1fef69397b29a211f2f9459f8ec8998387811a1ab6ac4b8bc2f4"
+    },
+    "axiom-hig-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "7ef8eac135f1b54952aa30e80f6b466646a6ccce41ee5520c436143fc03d5a57"
+    },
+    "axiom-icloud-drive-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "0b087e77c6fb85791e9608ed35c8bbaea887e7017031b745aded9c956be8af59"
+    },
+    "axiom-in-app-purchases": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "0c1aa2861cae624ede532e58cde253e22351fbcc3fa705a09ddbd8a28d91ad87"
+    },
+    "axiom-ios-accessibility": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "835673c0ee92c929b33d3b2077e0e4d418356796f9dd9d5355af2de070326c47"
+    },
+    "axiom-ios-ai": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "8380f1cc561c6012d09e518442b23caec6452605df66d52ebbd40f527cbf3ed3"
+    },
+    "axiom-ios-build": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "379cd4dc15968bbb22309c9a6c7d39bfbdaecb99f8af70cfcba32bfb438f0932"
+    },
+    "axiom-ios-concurrency": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "803ceefe401d66e73dbf2e849b318e2826d6ca146b9fc69ba2e2e24669c0b96a"
+    },
+    "axiom-ios-data": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "24d7341b6d7188c19428faad8f049719755c736511464da646720b010d199fc8"
+    },
+    "axiom-ios-games": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "f060eb60ed85a3db6060f9b05d8e2b46038607791fcd8a9e7cd1ca1f4492acc9"
+    },
+    "axiom-ios-graphics": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "6c9653b1b5d7d6bd2f93f7bfb8edc16dd931d32a4dd4106b0d3a1fba501f9baa"
+    },
+    "axiom-ios-integration": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "24f545d492baa014cb71841917023e0ad3143a5cb6a11b87c1bcc15ed1de8d54"
+    },
+    "axiom-ios-ml": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "ef1e69e79fe18cf50c8efdb4a8cd73df4fbbf69938c0ca586a82ac74c744e2d0"
+    },
+    "axiom-ios-networking": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "7a6f368e3b35ab27c94ad8cf6fef4b1eefdd6e441f39dfe6d8d469f86e101298"
+    },
+    "axiom-ios-performance": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "52d8ecf2f0534545e38ba39c26dc6dbe41e84968de527fec81d9535a160d5db0"
+    },
+    "axiom-ios-testing": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "9421eafb638320fe1b76cb71da8a649746a8f39b3549bd45fcc764de57ddc557"
+    },
+    "axiom-ios-ui": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "3b9813f8ab4947b79a8b895ae600e7a53cbadc1315f0ab544bd57d25ccec1212"
+    },
+    "axiom-ios-vision": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "c7b0ffb52d64185fa7cc50eb19f87d4f7351fb2b37e0164dd424313f4e211982"
+    },
+    "axiom-liquid-glass": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "4f6b652a5cd5416adc204a475d53e7ff23f779470afffe83f99f284e671a4cdd"
+    },
+    "axiom-liquid-glass-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "ca02c299d1b9a849b2db8649cca96ec87b8d531e517d6e05f32f19777534849d"
+    },
+    "axiom-lldb": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "a2cfc65d8d7ef83f977913f5c0bb7bbddb5413f6177e69899c356b58a73b6e1f"
+    },
+    "axiom-lldb-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "b5235e9e9d4739c0113421325428ae6fdf96bd317696cd897bd9089ff1fb47d6"
+    },
+    "axiom-localization": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "7b0ad67549b2c7d7dfc3de80b7abb74fd115b3db856d9e13954f60c18adfe5d9"
+    },
+    "axiom-mapkit": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "bb8127530b72254f6e2d7cccfdad83ad238e222f89958d05b4c468f963447a20"
+    },
+    "axiom-mapkit-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "b48e94f472b1d9831e959945e466030f83ceecf973539a4b4383e36baa745d0a"
+    },
+    "axiom-mapkit-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "a3ccd8c2e0aa4a705d63f5a89022fcc3482eed39a0befafa0d5ff18f56906f22"
+    },
+    "axiom-memory-debugging": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "41e25808ec57e0f79f5e8e01b1307f8c1e91bd08e0b07e2ff577056ed664d90a"
+    },
+    "axiom-metal-migration": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "d93ba74b78067e1da7f8691b556aba31e991abbf25aba523bffa3ff4b6227553"
+    },
+    "axiom-metal-migration-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "4c89c6933f98ac4bbbba617c7d37f44eac6a19e7dbe2119a0b7a83c16ea5c94a"
+    },
+    "axiom-metal-migration-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "4203ce252202793de218c8b19f2174b3b103c2792ea5e416bae45fde15d1e363"
+    },
+    "axiom-metrickit-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "5d1032e91dc9c2ec0548800bbfea841f6518336ef54308d6eeae8549c3cdf9c5"
+    },
+    "axiom-network-framework-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "d747db873c798142c99f6d717bdfd21dd13cef1003bd672a45ff8d426adce08b"
+    },
+    "axiom-networking": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "db50df997a8c8e30a1cda969d43608d2b0743f6e98f7d2240f1fbbb0db853416"
+    },
+    "axiom-networking-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "054f8479cf8f6c18b56a226527fca7d7a22c78cbcc3d2e19faa397f2a637e792"
+    },
+    "axiom-networking-legacy": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "f6eabb5052b257127832da8e31f8656329666b1b50ab10650ff063375ac00273"
+    },
+    "axiom-networking-migration": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "9dd39c4a89d6f1fe0aff6e15bf434ac15b6f6ea808c165e373e59b9b433e8722"
+    },
+    "axiom-now-playing": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "a01660178c8258a05826e9455819027b3eea0c7f869110244e509c4bec8c12ea"
+    },
+    "axiom-now-playing-carplay": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "5308dca1c0ed18accf90ac57d950a7d5cb851ca1f0ddaa70139cc1e1b96f87a8"
+    },
+    "axiom-now-playing-musickit": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "a1e11d53614ac359147f3680ec281d130b42107432934e0501cb8f7313182df3"
+    },
+    "axiom-objc-block-retain-cycles": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "9e39dd35bc2c68868de1877782963b7c2b7fe1a5f6f4f82d4a9c1af201fa7501"
+    },
+    "axiom-ownership-conventions": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "b7ecb0dfe0fc75c99fb3575eb8153633a486fc035601316f614929303cb60543"
+    },
+    "axiom-performance-profiling": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "613edc031d7153578e34ac0993a579d0cb9547fb297591c102f247b8cc458ab8"
+    },
+    "axiom-photo-library": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "e2e5d95ae5154512a2606290e95840c42a2d7a897393153f0f2e83ed42f39714"
+    },
+    "axiom-photo-library-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "9eb3955c0a5b0bf8f658281582ea93d0faf1436963f9962d9daed1b0416409ea"
+    },
+    "axiom-privacy-ux": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "b48dadb657da94ee4787984be76d7e6b3dd7d71c9051198828977574a5d98713"
+    },
+    "axiom-realitykit": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "fdd903f08f4fcfb1b64b3a4fbafc2a01aad541c3f03c8856fa21f282bda459ba"
+    },
+    "axiom-realitykit-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "cbe4d9b613dee1737e3c9fd2358a9466037689726d39ec2b39d07598d0984508"
+    },
+    "axiom-realitykit-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "1e450ea132708d792786496c122ff5fecc948ab855ab8ee4dcb46322178a424a"
+    },
+    "axiom-realm-migration-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "ea989211125c847dd07b9ca94dd30168713a412b27912bac5bdabc1de487e3b4"
+    },
+    "axiom-scenekit": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "980e7746e9c7e32067545afe202035e562920f76e08172752e736c1460698239"
+    },
+    "axiom-scenekit-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "cefa5d5d6dd9483fb580ce96a35856bf7c70adef168751bc4308bea6e9ff838c"
+    },
+    "axiom-sf-symbols": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "a87471691e6ae6cb207feef2e16887ee879a5da247562f795737ff782ecd1883"
+    },
+    "axiom-sf-symbols-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "0ee61833753fe30bfe7dd25732cda10ef4c56294b1a627704def3ba8ce067e5d"
+    },
+    "axiom-shipping": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "45e4ea56d8e41eff0d7f4e7f7824be8023e4a661f687479a673f8b75c78adb6e"
+    },
+    "axiom-spritekit": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "280cdcb326dfdd5c768b96426da974154a3c5201eb9cfa3a22f185768d4c88b0"
+    },
+    "axiom-spritekit-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "c4fa537085b7a442629defaf16a56d322500003cdacdb6f46f670c1860e90d30"
+    },
+    "axiom-spritekit-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "93abfc389a51bd2ec096ca20c876572b8e07e5f082869e6722722e6f6e58a155"
+    },
+    "axiom-sqlitedata": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "f005afde17f91ef72a4734c586600465021394ab04f0c54cdeb6fb50d0360bc5"
+    },
+    "axiom-sqlitedata-migration": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "3859956d451a981f5c215b0222a658348394b6f9d8766aaa16ff8de573faeba9"
+    },
+    "axiom-sqlitedata-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "73d6f0046004e03759bdf3a2d70aa243eb7dadbb644fc157ebc38739db7ddde1"
+    },
+    "axiom-storage": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "be83f405ba0265353661fbc85c413c8887f4f1b799e00ba41f864e3f17f19877"
+    },
+    "axiom-storage-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "5053abdc4e22da5bfee8a478d6b2945a52f82774361774651eaeaf2da9540724"
+    },
+    "axiom-storage-management-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "dacd344de217531d4d18b4be1dda22b9f056ec89a05b8f03349c806c8008ae67"
+    },
+    "axiom-storekit-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "543a9f4b2b6000aec7f4052b7c15c6151663e2f77cd713e301fc2d01b033f123"
+    },
+    "axiom-swift-concurrency": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "03c8d19ac691e94e1ebed628cc514effd0312f4dfb93cb043b83dfb01f1e70d0"
+    },
+    "axiom-swift-concurrency-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "53197d09c9a2036d4cc794a7cf15c2b1291c437b8097d4cf94f2808c3a40a90e"
+    },
+    "axiom-swift-performance": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "4996fd2bd0bca5a4aa71c2ccc19e5e9ad83434a95fb0eebe80fa08042a57a91a"
+    },
+    "axiom-swift-testing": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "664a99871bc8d455ffb1faa0b3e219592a68500ea1c03f55ff57eb5b87120d75"
+    },
+    "axiom-swiftdata": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "448316d774a5114941aa456b2c6289b650dfed2e6671c3525706f5c3d8469a2f"
+    },
+    "axiom-swiftdata-migration": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "cfd70c6faa77ea6863b8dd8ec0c85b1eabedb320e2f55b67f0ab9f03f3649e21"
+    },
+    "axiom-swiftdata-migration-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "bc7d962e0b02c68169c0560c8cdd15b7604528bf6faaccebae66d75b8a6c2d8a"
+    },
+    "axiom-swiftui-26-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "cbe55f00b71db054d193273060e879586fe0bccbac64347c674feb5f65466a4c"
+    },
+    "axiom-swiftui-animation-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "14a02ecf26d795ac1eba3e06cb97205ef0ff1b5b8844c878bbda18db31f3eebd"
+    },
+    "axiom-swiftui-architecture": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "097aba83449f8a0f0c949343c3b4c6d39781af9c030db0c987693ddb9100db99"
+    },
+    "axiom-swiftui-containers-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "2b922cfc079db3a38f2ca3d85900b371653d387770b6d22a9aa16993029edcbe"
+    },
+    "axiom-swiftui-debugging": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "4f308752f52ef041d1e2171c645a4786e695a726af2bb873dac7bbe7905b59d5"
+    },
+    "axiom-swiftui-debugging-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "54cc563054a9d9bcc6e563c0dc3b4a515d232572883e1a33a517775877484f0c"
+    },
+    "axiom-swiftui-gestures": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "4d56e889858f75167d5eacfd1b47d61f192281fef9186b6e93df0ed91d7f60ee"
+    },
+    "axiom-swiftui-layout": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "0655f230be16178a46cb228918098a72de37a38dce1a7b35843a0cc0e2227d7d"
+    },
+    "axiom-swiftui-layout-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "c53d8cb085e3ac9a5d1f2422a0892a9db47bfd71bf2b608e2fa69e72757e43d3"
+    },
+    "axiom-swiftui-nav": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "3956ed4ebb59cc48d36eaf2697315229004b208068fadac1f6db8280f93ecdb1"
+    },
+    "axiom-swiftui-nav-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "8c6a3e378595c99347c39b27591ea9c41b0c1d0a57a55a4825af671d4885e6df"
+    },
+    "axiom-swiftui-nav-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "ab168e178da19861d5b95f2086b1d0eeded53e9d475ef8b35d4be7865d9b7ef4"
+    },
+    "axiom-swiftui-performance": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "fad4afd85f98dc776e1c06773a55436dfd350f816763e7ef895f5ab72e8fbfb7"
+    },
+    "axiom-swiftui-search-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "976d10d0065c0778a44b7a3df82d38ae2127d4bc322bd1e5467e3cfa2eff8a51"
+    },
+    "axiom-synchronization": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "29030f2c98646a35b31eb3a78e527d9615845ea44d9e717c3d43d2827a0acad0"
+    },
+    "axiom-testflight-triage": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "ac71895e7d8352b22bc8d003b070ff01b291c67ead0f3827d5ecdc16611f7b42"
+    },
+    "axiom-testing-async": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "08d4ef473cfc0ee9173a4da9020f65f9dffa0e4afe6d05c6755bb55854c6149d"
+    },
+    "axiom-textkit-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "27a4c625b0c1b5eb2bea4b8a5ad18be536483bfebc047eb89fe19e69147af81e"
+    },
+    "axiom-timer-patterns": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "b6b2ce6e634574847a2bb94e1c45aba66d23004c33e675941a90d15a38e161bf"
+    },
+    "axiom-timer-patterns-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "df1ce6352c22d8c785358ce39d6a72e57f1cf0dce4dc653c436adc94f73f9998"
+    },
+    "axiom-transferable-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "67b13272faaee38a1042440fd9167aabce1acc64b1e03c6ae33acfd947d61b74"
+    },
+    "axiom-tvos": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "b9397c63f69089d13b70a61557a3deac9ec9633ee351d1a98fac46978923ffe9"
+    },
+    "axiom-typography-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "f19ea8183e4736b16c26eef511f31b8659c279cd4c4ca9a4094747e2947af595"
+    },
+    "axiom-ui-recording": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "99240a8678c86d1a4cddd403a2c826e41a7f6df0245435f40f2974494f8d9836"
+    },
+    "axiom-ui-testing": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "04adbbc667ed8ab3df24d3a5a5f7b63f7da292c2996403c7557c5a9251a644bc"
+    },
+    "axiom-uikit-animation-debugging": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "28c4104afa24cbd66d17ec7ecde088f1585ff2a216a034acbe7d228a67bd33af"
+    },
+    "axiom-uikit-bridging": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "09508df158096a875a5bc20297bc09d78f4f29f5ddfcbc6a36c0e121b9fc1404"
+    },
+    "axiom-using-axiom": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "42e4bf80c4ed932c62a0ccd4ce81f49166c53f239e548ab73774aefa1f81e1d0"
+    },
+    "axiom-vision": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "5185e210b3bc0a68969651547932f2f81ddd7bdb83048ad36fc99cdb1c5f2f5f"
+    },
+    "axiom-vision-diag": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "ae1fe5e1c71c19e577a082d7bfcc61def94317ca3103c88f1e4ffb0ede7dacfb"
+    },
+    "axiom-vision-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "10f3f2f2882131c6e676927661cc18ef1a6d8a1ff52a77f0d9a05869fffb17c7"
+    },
+    "axiom-xcode-debugging": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "24c6dbf794285b786ea5751f2547059dc2e3bbe8a8dce6fffd492667c65d220f"
+    },
+    "axiom-xcode-mcp": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "ec6ee2e87f43d5349458003441a61892c7df672f023e3cc3fa3993fe1beaa9e8"
+    },
+    "axiom-xcode-mcp-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "8aeaeb333d2f6b27776f6ea1bad7ac5479649a4e2583da15e0a989624cb8421a"
+    },
+    "axiom-xcode-mcp-setup": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "8966e33e100572eec22648b15529f96355fba872bb8d0e17c074ca0b6b9fac7c"
+    },
+    "axiom-xcode-mcp-tools": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "b9484776cf369760283a92b3ecc88790b382dc27b7233fc1d140a4a6ea12bbd8"
+    },
+    "axiom-xctest-automation": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "95a06a19478841445b9c66be6510af213b2bb0df863c470aff9c85c8e1529508"
+    },
+    "axiom-xctrace-ref": {
+      "source": "CharlesWiltgen/Axiom",
+      "sourceType": "github",
+      "computedHash": "29f4c1e2661a66dfa029eef33708cb31c216c4c3d9940ba73654f7ff3f292ed5"
+    }
+  }
+}

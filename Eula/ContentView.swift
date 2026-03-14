@@ -1,86 +1,321 @@
+
 //
 //  ContentView.swift
-//  Eula
+//  xcodegame
 //
-//  Created by Zhan Si on 2/12/26.
+//  Created by Zhan Si on 2026/1/6.
 //
 
 import SwiftUI
-import CoreData
+import Combine
 
+/**
+ * [INPUT]: 依赖 AppScreen, MainTabView, HomeView, ShortsView, LoginSelectionView, EmailSignUpView, ForgotPasswordView, EULAView
+ * [OUTPUT]: 应用的主界面，负责登录状态管理和 Tab 导航
+ * [POS]: 根视图，被 xcodegameApp 调用
+ * [SWIFTUI_STATE]: @State private var selectedTab: NavTab - 当前选中的 Tab
+ * [SWIFTUI_STATE]: @ObservedObject var authManager - 登录状态管理器
+ * [SWIFTUI_STATE]: @State private var authPath: [AuthRoute] - 认证导航路径
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
+    @State private var selectedTab: NavTab = .home
+    @ObservedObject private var authManager = AuthManager.shared
+    @State private var authPath: [AuthRoute] = []
+    @State private var isLoginAgreementChecked = false
+    @State private var didRestoreSession = false
+    @State private var isTabBarHidden = false
+    @State private var showAddOverlay = false
+    @State private var showMakeupShare = false
+    @State private var showReleaseVideo = false
+    @State private var showBanUserPopup = false
+    @State private var showReportPopup = false
+    @State private var pendingBanUser: BanUserTarget?
+    @StateObject private var blockedUsersStore = BlockedUsersStore()
+    @StateObject private var chatListStore = ChatListStore()
+    @StateObject private var profileStatsStore = ProfileStatsStore()
+    
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
+        Group {
+            if authManager.isLoggedIn {
+                mainContent
+                    .overlay {
+                        if showAddOverlay {
+                            AddView(onClose: {
+                                withAnimation {
+                                    showAddOverlay = false
+                                }
+                            }, onMakeupShare: {
+                                withAnimation {
+                                    showAddOverlay = false
+                                }
+                                showMakeupShare = true
+                            }, onReleaseVideo: {
+                                withAnimation {
+                                    showAddOverlay = false
+                                }
+                                showReleaseVideo = true
+                            })
+                            .transition(.opacity)
+                            .zIndex(100)
+                        }
+                    }
+                    .fullScreenCover(isPresented: $showMakeupShare) {
+                        MakeupShareView()
+                    }
+                    .fullScreenCover(isPresented: $showReleaseVideo) {
+                        ReleaseVideoView()
+                    }
+            } else if authManager.isLoading {
+                LaunchScreenView()
+            } else {
+                NavigationStack(path: $authPath) {
+                    LoginSelectionView(isAgreementChecked: $isLoginAgreementChecked, onLoginSuccess: handleLoginSuccess, onShowEmailLogin: showEmailLogin, onShowEmailSignUp: showEmailSignUp, onShowEULA: showEULA)
+                        .navigationDestination(for: AuthRoute.self) { route in
+                            switch route {
+                            case .emailLogin:
+                                EmailSignUpView(mode: .login, onLoginSuccess: handleLoginSuccess, onForgotPassword: showForgotPasswordFromLogin, onBack: handleBack)
+                                    .navigationBarBackButtonHidden(true)
+                            case .emailSignUp:
+                                EmailSignUpView(mode: .signUp, onLoginSuccess: handleLoginSuccess, onForgotPassword: showForgotPasswordFromSignUp, onBack: handleBack)
+                                    .navigationBarBackButtonHidden(true)
+                            case .forgotPassword:
+                                ForgotPasswordView(onComplete: handlePasswordResetComplete, onBack: handleBack)
+                                    .navigationBarBackButtonHidden(true)
+                            case .eula:
+                                EULAView(
+                                    onBack: handleBack,
+                                    onSure: {
+                                        isLoginAgreementChecked = true
+                                        handleBack()
+                                    }
+                                )
+                                .navigationBarBackButtonHidden(true)
+                            case .userAgreement:
+                                UserAgreementView()
+                                    .navigationBarBackButtonHidden(true)
+                            case .privacyPolicy:
+                                PrivacyPolicyView()
+                                    .navigationBarBackButtonHidden(true)
+                            }
+                        }
+                        .navigationBarHidden(true)
+                }
+            }
+        }
+        .onAppear {
+            if !didRestoreSession {
+                didRestoreSession = true
+                authManager.restoreSession()
+            }
+        }
+    }
+    
+    var mainContent: some View {
+        GeometryReader { proxy in
+            AppScreen {
+                ZStack(alignment: .bottom) {
+                    ZStack {
+                        CachedTab(tab: .home, isSelected: selectedTab == .home) {
+                            HomeView()
+                        }
+
+                        CachedTab(tab: .shorts, isSelected: selectedTab == .shorts) {
+                            ShortsView(isTabSelected: selectedTab == .shorts)
+                        }
+
+                        CachedTab(tab: .messages, isSelected: selectedTab == .messages) {
+                            MessageView()
+                        }
+
+                        CachedTab(tab: .profile, isSelected: selectedTab == .profile) {
+                            ProfileView(onLogout: handleLogout)
+                        }
+                    }
+
+                    if !isTabBarHidden && !showAddOverlay {
+                        MainTabView(selectedTab: $selectedTab, onAddTap: {
+                            withAnimation {
+                                showAddOverlay = true
+                            }
+                        })
+                        .padding(.bottom, 0)
+                        .ignoresSafeArea(.container, edges: .bottom)
+                        .transition(.opacity)
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+        }
+        .environment(\.tabBarHiddenBinding, $isTabBarHidden)
+        .environment(\.selectedNavTab, selectedTab)
+        .environment(\.selectedNavTabBinding, $selectedTab)
+        .environment(\.blockedUsersStore, blockedUsersStore)
+        .environmentObject(blockedUsersStore)
+        .environmentObject(chatListStore)
+        .environmentObject(profileStatsStore)
+        .appPopup(isPresented: $showBanUserPopup) {
+            BanUserPopup(
+                onReport: {
+                    showBanUserPopup = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        showReportPopup = true
                     }
+                },
+                onBlock: {
+                    if let pendingBanUser {
+                        blockedUsersStore.block(pendingBanUser)
+                    }
+                    showBanUserPopup = false
+                },
+                onCancel: {
+                    showBanUserPopup = false
                 }
+            )
+        }
+        .appPopup(isPresented: $showReportPopup) {
+            ReportPopup(
+                onSubmit: { _ in
+                    showReportPopup = false
+                },
+                onCancel: {
+                    showReportPopup = false
+                }
+            )
+        }
+        .environment(\.banUserAction, { target in
+            pendingBanUser = target
+            withAnimation {
+                showBanUserPopup = true
             }
-            Text("Select an item")
+        })
+        .onReceive(authManager.$isLoggedIn.removeDuplicates()) { isLoggedIn in
+            if isLoggedIn {
+                handleUserLoggedIn()
+            }
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+    private struct CachedTab<Content: View>: View {
+        let tab: NavTab
+        let isSelected: Bool
+        let content: () -> Content
+        @State private var didLoad = false
 
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        var body: some View {
+            Group {
+                if isSelected || didLoad {
+                    content()
+                        .background(TabBarVisibilitySync(isEnabled: isSelected))
+                        .onAppear { didLoad = true }
+                } else {
+                    Color.clear
+                }
             }
+            .opacity(isSelected ? 1 : 0)
+            .allowsHitTesting(isSelected)
+            .accessibilityHidden(!isSelected)
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
+    private func handleLoginSuccess() {
+        handleUserLoggedIn()
+        authPath.removeAll()
+    }
+    
+    private func handleUserLoggedIn() {
+        guard let userId = authManager.currentUserId else { return }
+        
+        blockedUsersStore.setCurrentUserId(userId)
+        profileStatsStore.setCurrentUserId(userId)
+        
+        Task {
+            await blockedUsersStore.loadFromServer(userId: userId)
+            await profileStatsStore.loadFromServer(userId: userId)
+        }
+    }
 
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+    private func handleLogout() {
+        authManager.signOut()
+        selectedTab = .home
+        isTabBarHidden = false
+        showAddOverlay = false
+        showMakeupShare = false
+        showReleaseVideo = false
+        showBanUserPopup = false
+        showReportPopup = false
+        pendingBanUser = nil
+        authPath.removeAll()
+        
+        blockedUsersStore.setCurrentUserId(nil)
+        profileStatsStore.setCurrentUserId(nil)
+        chatListStore.items = []
+    }
+
+    private func showEmailLogin() {
+        authPath.append(.emailLogin)
+    }
+
+    private func showEmailSignUp() {
+        authPath.append(.emailSignUp)
+    }
+
+    private func showForgotPasswordFromLogin() {
+        authPath.append(.forgotPassword(source: .login))
+    }
+
+    private func showForgotPasswordFromSignUp() {
+        authPath.append(.forgotPassword(source: .signUp))
+    }
+    
+    private func showEULA() {
+        authPath.append(.eula)
+    }
+
+    private func handlePasswordResetComplete() {
+        authPath = [.emailLogin]
+    }
+
+    private func handleBack() {
+        if !authPath.isEmpty {
+            authPath.removeLast()
         }
     }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
+enum ForgotPasswordSource: Hashable {
+    case login
+    case signUp
+}
 
-#Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+enum AuthRoute: Hashable {
+    case emailLogin
+    case emailSignUp
+    case forgotPassword(source: ForgotPasswordSource)
+    case eula
+    case userAgreement
+    case privacyPolicy
+}
+
+enum NavTab: String, CaseIterable {
+    case home
+    case shorts
+    case add
+    case messages
+    case profile
+    
+    var title: String {
+        switch self {
+        case .home: return "Home"
+        case .shorts: return "Shorts"
+        case .add: return "Create"
+        case .messages: return "Messages"
+        case .profile: return "Profile"
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
