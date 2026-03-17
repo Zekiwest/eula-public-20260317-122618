@@ -67,9 +67,10 @@ struct SettingsView: View {
             .appPopup(isPresented: $showDeleteAccount) {
                 DeleteAccountPopup(
                     onSure: {
-                        // Implement deletion logic here
-                        print("Delete Account Confirmed")
                         showDeleteAccount = false
+                        onLogout()
+                        ToastManager.shared.show("Account access has been removed on this device")
+                        dismiss()
                     },
                     onCancel: {
                         showDeleteAccount = false
@@ -84,6 +85,7 @@ struct SettingsView: View {
             }
             .background(TabBarVisibilitySync())
             .navigationBarHidden(true)
+            .toast()
             .onAppear {
                 tabBarHiddenBinding?.wrappedValue = true
             }

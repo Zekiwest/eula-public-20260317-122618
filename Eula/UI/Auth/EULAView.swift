@@ -93,6 +93,7 @@ By tapping “Agree,” you accept the Terms of Use and Privacy Policy.
                                                         .stroke(Color.white, lineWidth: 1)
                                                 )
                                         }
+                                        .accessibilityIdentifier("eula_cancel_button")
                                         
                                         Button(action: onSure) {
                                             Text("Agree")
@@ -107,6 +108,7 @@ By tapping “Agree,” you accept the Terms of Use and Privacy Policy.
                                                         .stroke(Color.white, lineWidth: 1)
                                                 )
                                         }
+                                        .accessibilityIdentifier("eula_agree_button")
                                     }
                                     .padding(.bottom, isSmallScreen ? 20 : 30)
                                 }

@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4E919F862F691529007EB6D3 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E919F852F691529007EB6D3 /* StoreKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4EA481172F3D96E7007D91EA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E919F852F691529007EB6D3 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4EA481042F3D96E7007D91EA /* Eula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EA481162F3D96E7007D91EA /* EulaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EulaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EA481202F3D96E8007D91EA /* EulaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EulaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E919F862F691529007EB6D3 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,12 +91,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E919F842F691529007EB6D3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4E919F852F691529007EB6D3 /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4EA480FB2F3D96E7007D91EA = {
 			isa = PBXGroup;
 			children = (
 				4EA481062F3D96E7007D91EA /* Eula */,
 				4EA481192F3D96E7007D91EA /* EulaTests */,
 				4EA481232F3D96E8007D91EA /* EulaUITests */,
+				4E919F842F691529007EB6D3 /* Frameworks */,
 				4EA481052F3D96E7007D91EA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -412,7 +427,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Eula/Info.plist;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We use the microphone to record voice messages.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We use your microphone to record and send voice messages in chats.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use your photo library so you can select and upload videos in your posts.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -424,8 +440,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhilin.Eula;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhilin.Glame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRIVACY_POLICY_URL = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1YXFmcnl4d2FjaXFlemdmZ3FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYzODA4MDEsImV4cCI6MjA4MTk1NjgwMX0.gliEd8kAC9Yg3atpKkwG1X7VSW6AWK-gGbr_VnVtfrI";
 				SUPABASE_URL = "https://luaqfryxwaciqezgfgqm.supabase.co";
@@ -435,6 +452,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TERMS_OF_USE_URL = "";
 				TRENDTAILOR_MESSAGE_COST_COINS = 10;
 			};
 			name = Debug;
@@ -450,7 +468,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Eula/Info.plist;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We use the microphone to record voice messages.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We use your microphone to record and send voice messages in chats.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use your photo library so you can select and upload videos in your posts.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -462,8 +481,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhilin.Eula;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhilin.Glame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRIVACY_POLICY_URL = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1YXFmcnl4d2FjaXFlemdmZ3FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYzODA4MDEsImV4cCI6MjA4MTk1NjgwMX0.gliEd8kAC9Yg3atpKkwG1X7VSW6AWK-gGbr_VnVtfrI";
 				SUPABASE_URL = "https://luaqfryxwaciqezgfgqm.supabase.co";
@@ -473,6 +493,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TERMS_OF_USE_URL = "";
 				TRENDTAILOR_MESSAGE_COST_COINS = 10;
 			};
 			name = Release;

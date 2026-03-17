@@ -9,6 +9,7 @@ struct WalletRechargeView: View {
     @State private var isLoadingCoins = false
     @State private var isLoadingProducts = false
     @State private var isPurchasing = false
+    @State private var isRestoring = false
     @State private var productPriceByID: [String: String] = [:]
 
     private let options: [WalletOption] = MockWallet.rechargeOptions
@@ -72,11 +73,34 @@ struct WalletRechargeView: View {
                             WalletRechargeButton(
                                 scale: scale,
                                 isLoading: isPurchasing,
-                                isDisabled: isPurchasing || isLoadingProducts || options.isEmpty
+                                isDisabled: isPurchasing || isRestoring || isLoadingProducts || options.isEmpty
                             ) {
                                 Task {
                                     await purchaseSelectedOption()
                                 }
+                            }
+
+                            VStack(spacing: 10 * scale) {
+                                Text("All top-ups are consumable digital credits.")
+                                    .font(.system(size: 12 * scale, weight: .regular))
+                                    .foregroundStyle(.white.opacity(0.8))
+                                    .multilineTextAlignment(.center)
+                                    .padding(.horizontal, 20 * scale)
+
+                                Button(isRestoring ? "Restoring..." : "Restore Purchases") {
+                                    Task {
+                                        await restorePurchases()
+                                    }
+                                }
+                                .font(.system(size: 14 * scale, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .frame(height: 36 * scale)
+                                .padding(.horizontal, 16 * scale)
+                                .background(Color.white.opacity(0.15))
+                                .clipShape(.rect(cornerRadius: 18 * scale, style: .continuous))
+                                .disabled(isRestoring || isPurchasing)
+                                .opacity((isRestoring || isPurchasing) ? 0.7 : 1)
+                                .accessibilityIdentifier("wallet_restore_purchases_button")
                             }
                         }
                         .padding(.top, 66)
@@ -166,6 +190,23 @@ struct WalletRechargeView: View {
             coins = try await ChatBackend.shared.walletBalance()
         } catch {
             coins = nil
+        }
+    }
+
+    @MainActor
+    private func restorePurchases() async {
+        if isRestoring || isPurchasing {
+            return
+        }
+        isRestoring = true
+        defer { isRestoring = false }
+
+        do {
+            try await WalletIAPService.shared.restorePurchases()
+            ToastManager.shared.show("Purchases restored")
+            await loadCoinsIfNeeded()
+        } catch {
+            ToastManager.shared.show("Unable to restore purchases right now")
         }
     }
 

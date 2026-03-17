@@ -26,7 +26,7 @@ struct DeleteAccountPopup: View {
                 // Illustration height (101) + gap (22) = 123 (distance from top of illustration to text)
                 // Background starts at y=48.
                 // Distance from background top to text = 123 - 48 = 75.
-                Text("Deleting the account will clear the data.Are you sure you want to continue?")
+                Text("This action removes account access on this device and signs you out. For permanent account deletion, contact support in app settings. Continue?")
                     .font(.system(size: 16, weight: .bold)) // Poppins Bold 16 -> SF Pro Bold 16
                     .foregroundStyle(Color(hexString: "333333"))
                     .lineSpacing(4) // approx 1.5em line height

@@ -50,6 +50,10 @@ actor WalletIAPService {
         }
     }
 
+    func restorePurchases() async throws {
+        try await AppStore.sync()
+    }
+
     private func resolveProduct(productID: String) async throws -> Product {
         if let cached = cachedProducts[productID] {
             return cached
