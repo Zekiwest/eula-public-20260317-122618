@@ -2,7 +2,6 @@ import SwiftUI
 
 struct UserAgreementView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.openURL) private var openURL
     @State private var doc: AgreementDocument?
     @State private var isLoading = true
     @State private var errorText: String?
@@ -37,19 +36,6 @@ struct UserAgreementView: View {
                                 .foregroundStyle(.white.opacity(0.85))
                                 .lineSpacing(4)
                                 .multilineTextAlignment(.leading)
-
-                            if let termsURL = AppConfig.termsOfUseURL {
-                                Button("Open in Browser") {
-                                    openURL(termsURL)
-                                }
-                                .font(.system(size: 14 * scale, weight: .semibold))
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 44 * scale)
-                                .background(Color.white.opacity(0.14))
-                                .clipShape(.rect(cornerRadius: 22 * scale, style: .continuous))
-                                .accessibilityIdentifier("user_agreement_open_in_browser")
-                            }
                         }
                         .padding(.top, topInset + 60)
                         .padding(.horizontal, 16 * scale)
@@ -105,7 +91,6 @@ struct UserAgreementView_Previews: PreviewProvider {
 
 struct PrivacyPolicyView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.openURL) private var openURL
     @State private var doc: AgreementDocument?
     @State private var isLoading = true
     @State private var errorText: String?
@@ -140,19 +125,6 @@ struct PrivacyPolicyView: View {
                                 .foregroundStyle(.white.opacity(0.85))
                                 .lineSpacing(4)
                                 .multilineTextAlignment(.leading)
-
-                            if let privacyURL = AppConfig.privacyPolicyURL {
-                                Button("Open in Browser") {
-                                    openURL(privacyURL)
-                                }
-                                .font(.system(size: 14 * scale, weight: .semibold))
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 44 * scale)
-                                .background(Color.white.opacity(0.14))
-                                .clipShape(.rect(cornerRadius: 22 * scale, style: .continuous))
-                                .accessibilityIdentifier("privacy_policy_open_in_browser")
-                            }
                         }
                         .padding(.top, topInset + 60)
                         .padding(.horizontal, 16 * scale)

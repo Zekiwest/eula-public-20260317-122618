@@ -23,25 +23,4 @@ enum AppConfig {
         (Bundle.main.object(forInfoDictionaryKey: "TRENDTAILOR_MESSAGE_COST_COINS") as? Int) ?? 10
     }
 
-    static var termsOfUseURL: URL? {
-        guard let raw = Bundle.main.object(forInfoDictionaryKey: "TERMS_OF_USE_URL") as? String else {
-            return nil
-        }
-        let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !value.isEmpty else {
-            return nil
-        }
-        return URL(string: value)
-    }
-
-    static var privacyPolicyURL: URL? {
-        guard let raw = Bundle.main.object(forInfoDictionaryKey: "PRIVACY_POLICY_URL") as? String else {
-            return nil
-        }
-        let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !value.isEmpty else {
-            return nil
-        }
-        return URL(string: value)
-    }
 }
