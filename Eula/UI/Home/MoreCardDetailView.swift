@@ -580,7 +580,7 @@ private extension MoreCardDetailView {
     func sendComment() {
         let text = commentText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else {
-            showToastMessage("请输入内容")
+            showToastMessage("Please enter content")
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.error)
             return
@@ -593,7 +593,7 @@ private extension MoreCardDetailView {
 
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
-        showToastMessage("发送成功")
+        showToastMessage("Sent successfully")
     }
 
     func showToastMessage(_ message: String) {

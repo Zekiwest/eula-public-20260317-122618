@@ -47,7 +47,7 @@ struct ChatDetailView: View {
                             if profileStatsStore.isMutualFollowing(userId) {
                                 showVideoCall = true
                             } else {
-                                ToastManager.shared.show("需要互相关注才能视频通话")
+                                ToastManager.shared.show("You both need to follow each other to start a video call")
                             }
                         } label: {
                             Image(systemName: "video.fill")
@@ -231,7 +231,7 @@ struct ChatDetailView: View {
                 if Task.isCancelled { return }
                 await MainActor.run {
                     isSendingToAI = false
-                    let fallback = "（请求失败：\(error.localizedDescription)）"
+                    let fallback = "(Request failed: \(error.localizedDescription))"
                     lastErrorText = fallback
                     replaceTextMessage(id: placeholderID, newText: fallback)
                 }

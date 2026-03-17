@@ -22,6 +22,7 @@ struct ContentView: View {
     @State private var showBanUserPopup = false
     @State private var showReportPopup = false
     @State private var pendingBanUser: BanUserTarget?
+    @State private var lastPrefetchedUserId: String?
     @StateObject private var blockedUsersStore = BlockedUsersStore()
     @StateObject private var chatListStore = ChatListStore()
     @StateObject private var profileStatsStore = ProfileStatsStore()
@@ -215,6 +216,8 @@ struct ContentView: View {
     
     private func handleUserLoggedIn() {
         guard let userId = authManager.currentUserId else { return }
+        guard lastPrefetchedUserId != userId else { return }
+        lastPrefetchedUserId = userId
         
         blockedUsersStore.setCurrentUserId(userId)
         profileStatsStore.setCurrentUserId(userId)
@@ -236,6 +239,7 @@ struct ContentView: View {
         showReportPopup = false
         pendingBanUser = nil
         authPath.removeAll()
+        lastPrefetchedUserId = nil
         
         blockedUsersStore.setCurrentUserId(nil)
         profileStatsStore.setCurrentUserId(nil)

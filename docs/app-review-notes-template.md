@@ -44,20 +44,20 @@ Additional Review Notes:
 
 ---
 
-## 中文填写指引（不要直接粘贴到审核）
+## Authoring Guide (Do Not Paste Directly to Review Notes)
 
-- App Purpose：写清楚“给谁用、解决什么问题、核心价值”。
-- Main Feature Access Instructions：按审核员可复现路径写，不要省略入口层级。
-- Demo Credentials：必须长期有效；多角色账号要分别给。
-- Screen Recording：必须真机录制，且从冷启动开始，覆盖登录/删号/付费/权限弹窗。
-- External Services：把 Supabase、StoreKit 之外的服务也补全（如 AI、风控、内容审核）。
-- Regional Availability：若无差异，明确写“all regions consistent”。
-- Regulated Industry Documentation：涉及医疗/金融等强监管场景必须附资质。
+- App Purpose: Clearly state target users, the problem solved, and the core value.
+- Main Feature Access Instructions: Provide a reproducible reviewer path and keep all entry levels explicit.
+- Demo Credentials: Keep credentials valid long-term; provide separate accounts for each role.
+- Screen Recording: Record on a physical device from cold launch, covering login, deletion, purchase, and permission prompts.
+- External Services: List all services beyond Supabase and StoreKit (for example AI, risk control, or content moderation).
+- Regional Availability: If there are no differences, explicitly state "all regions consistent".
+- Regulated Industry Documentation: For heavily regulated scenarios such as healthcare or finance, include required licenses.
 
-## 本项目建议你补齐的变量
+## Project Variables To Complete
 
 - `[demo_email]`
 - `[demo_password]`
-- `TERMS_OF_USE_URL`（工程配置）
-- `PRIVACY_POLICY_URL`（工程配置）
-- 区域差异声明与（如有）行业资质信息
+- `TERMS_OF_USE_URL` (project configuration)
+- `PRIVACY_POLICY_URL` (project configuration)
+- Regional-difference statement and regulated-industry qualifications (if applicable)

@@ -9,6 +9,11 @@ struct LaunchScreenView: View {
             let scaleX = width / 375.0
             let scaleY = height / 812.0
             let scale = max(scaleX, scaleY)
+            #if targetEnvironment(simulator)
+            let blurQualityScale: CGFloat = 0.45
+            #else
+            let blurQualityScale: CGFloat = 0.72
+            #endif
             
             ZStack {
                 // 1. Background (Reusing AppBackground logic but customized for Launch Screen specific positions if needed)
@@ -24,7 +29,7 @@ struct LaunchScreenView: View {
                     Ellipse()
                         .fill(Color(hexString: "ffc4cb"))
                         .frame(width: 610 * scale, height: 416 * scale)
-                        .blur(radius: 200 * scale)
+                        .blur(radius: 200 * scale * blurQualityScale)
                         .position(
                             x: (-128 + 610/2) * scale,
                             y: (-229 + 416/2) * scale
@@ -37,7 +42,7 @@ struct LaunchScreenView: View {
                     Ellipse()
                         .fill(Color(hexString: "ff4c62"))
                         .frame(width: 235 * scale, height: 254 * scale)
-                        .blur(radius: 90 * scale)
+                        .blur(radius: 90 * scale * blurQualityScale)
                         .position(
                             x: (86 + 235/2) * scale,
                             y: (-127 + 254/2) * scale
@@ -49,7 +54,7 @@ struct LaunchScreenView: View {
                     Ellipse()
                         .fill(Color(hexString: "81c8dc"))
                         .frame(width: 263 * scale, height: 230 * scale)
-                        .blur(radius: 76 * scale)
+                        .blur(radius: 76 * scale * blurQualityScale)
                         .position(
                             x: (203 + 263/2) * scale,
                             y: (513 + 230/2) * scale
@@ -61,7 +66,7 @@ struct LaunchScreenView: View {
                     Ellipse()
                         .fill(Color(hexString: "f7b257"))
                         .frame(width: 107 * scale, height: 156 * scale)
-                        .blur(radius: 76 * scale)
+                        .blur(radius: 76 * scale * blurQualityScale)
                         .position(
                             x: (321 + 107/2) * scale,
                             y: (416 + 156/2) * scale
@@ -165,7 +170,7 @@ struct LaunchScreenView: View {
                         Ellipse()
                             .fill(Color(hexString: "81c8dc"))
                             .frame(width: 65, height: 69)
-                            .blur(radius: 18)
+                            .blur(radius: 18 * blurQualityScale)
                             .offset(x: -30, y: 49 - 88/2 + 69/2) // Offset calculation is tricky.
                             // Let's use absolute positioning within the 88x88 frame
                             .position(x: -30 + 65/2, y: 49 + 69/2)
@@ -174,21 +179,21 @@ struct LaunchScreenView: View {
                         Ellipse()
                             .fill(Color(hexString: "acb1d7"))
                             .frame(width: 67, height: 66)
-                            .blur(radius: 18)
+                            .blur(radius: 18 * blurQualityScale)
                             .position(x: 38 + 67/2, y: 44 + 66/2)
                         
                         // Ellipse 3 (Orange) - Top -20, Left -33
                         Ellipse()
                             .fill(Color(hexString: "f7b257"))
                             .frame(width: 61, height: 61)
-                            .blur(radius: 18)
+                            .blur(radius: 18 * blurQualityScale)
                             .position(x: -33 + 61/2, y: -20 + 61/2)
 
                         // Ellipse 1 (Pink) - Top -29, Left 21
                         Ellipse()
                             .fill(Color(hexString: "ff8796"))
                             .frame(width: 93, height: 93)
-                            .blur(radius: 18)
+                            .blur(radius: 18 * blurQualityScale)
                             .position(x: 21 + 93/2, y: -29 + 93/2)
                         
                         // Icon

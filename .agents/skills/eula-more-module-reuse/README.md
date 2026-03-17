@@ -1,15 +1,15 @@
-# 安装与使用
+# Installation and Usage
 
-## 本地安装
+## Local Installation
 
 ```bash
 npx skills add /Users/zhansi/Desktop/vibecoding/Eula/.agents/skills/eula-more-module-reuse
 ```
 
-## 校验安装
+## Verify Installation
 
 ```bash
 npx skills list
 ```
 
-出现 `eula-more-module-reuse` 即安装成功。
+If `eula-more-module-reuse` appears, the installation is successful.

@@ -24,6 +24,7 @@ struct ShortsView: View {
     @State private var isCommentsPresented = false
     @State private var commentsTargetID: ShortsItem.ID?
     @State private var lastPlaybackSyncContext: PlaybackSyncContext?
+    @State private var isAudioSessionConfigured = false
     
     // Figma constants for icon_play
     private let iconSize: CGFloat = 80
@@ -242,12 +243,23 @@ struct ShortsView: View {
             return cached
         }
 
+        let bundledFileURLs = resolveBundledVideoFileURLs()
+        if !bundledFileURLs.isEmpty {
+            Self.cachedBundledVideoURLs = bundledFileURLs
+            return bundledFileURLs
+        }
+
         let dataAssetURLs = resolveVideoDataAssetURLs()
         if !dataAssetURLs.isEmpty {
             Self.cachedBundledVideoURLs = dataAssetURLs
             return dataAssetURLs
         }
 
+        Self.cachedBundledVideoURLs = []
+        return []
+    }
+
+    private func resolveBundledVideoFileURLs() -> [URL] {
         let candidates: [(String?, String?)] = [
             ("mp4", "video_data"),
             ("mov", "video_data"),
@@ -270,20 +282,24 @@ struct ShortsView: View {
             }
         }
 
-        let resolved = Array(Set(urls)).sorted { $0.lastPathComponent < $1.lastPathComponent }
-        Self.cachedBundledVideoURLs = resolved
-        return resolved
+        return Array(Set(urls)).sorted { $0.lastPathComponent < $1.lastPathComponent }
     }
 
     private func resolveVideoDataAssetURLs() -> [URL] {
         let baseDirectory = preferredVideoStorageDirectory()
 
         var urls: [URL] = []
+        var consecutiveMisses = 0
         for index in 1...30 {
             let names = ["\(index)", "video_data/\(index)"]
             guard let asset = names.compactMap({ NSDataAsset(name: $0, bundle: .main) }).first else {
+                consecutiveMisses += 1
+                if consecutiveMisses >= 4 {
+                    break
+                }
                 continue
             }
+            consecutiveMisses = 0
 
             if let url = writeDataAssetToPlayableFile(data: asset.data, fileName: "shorts_video_data_\(index).mp4", preferredDirectory: baseDirectory) {
                 urls.append(url)
@@ -546,9 +562,15 @@ struct ShortsView: View {
     }
     
     private func configureVideoAudioSession() {
+        guard !isAudioSessionConfigured else { return }
         let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(.playback, mode: .moviePlayback, options: [])
-        try? session.setActive(true, options: [])
+        do {
+            try session.setCategory(.playback, mode: .moviePlayback, options: [])
+            try session.setActive(true, options: [])
+            isAudioSessionConfigured = true
+        } catch {
+            isAudioSessionConfigured = false
+        }
     }
     
     private func writeDataAssetToPlayableFile(data: Data, fileName: String, preferredDirectory: URL) -> URL? {
