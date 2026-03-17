@@ -1,12 +1,3 @@
-/**
- * [INPUT]: 依赖 Assets.xcassets (AppLogoIcon, LaunchDecoration) 和 AppBackground
- * [OUTPUT]: 对外提供 LaunchScreenView
- * [POS]: UI/Components/LaunchScreenView.swift, 应用入口启动页
- * [SWIFTUI_STATE]: 静态展示，通常结合 ContentView 的状态切换使用
- * [SWIFTUI_PREVIEWS]: struct LaunchScreenView_Previews: PreviewProvider { static var previews: some View { 验证
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
-
 import SwiftUI
 
 struct LaunchScreenView: View {

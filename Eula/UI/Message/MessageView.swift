@@ -28,7 +28,7 @@ struct MessageView: View {
                                                 selectedChatItem = item
                                                 isNavigatingToChat = true
                                             } else {
-                                                ToastManager.shared.show("需要互相关注才能聊天")
+                                                ToastManager.shared.show("Mutual follow is required to chat")
                                             }
                                         } label: {
                                             MessageCard(item: item, scale: scale)

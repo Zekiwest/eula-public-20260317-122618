@@ -1,15 +1,5 @@
 import SwiftUI
 
-/**
- * [INPUT]: 依赖 Assets (more_card_1, more_card_2, more_card_3, more_card_4, more_icon_dots, more_icon_heart, more_icon_arrow, heart_select)
- * [OUTPUT]: 对外提供 MoreModuleView, MoreCardsGridView
- * [POS]: UI/Home/Components 首页 More 模块
- * [SWIFTUI_STATE]: 无内部状态
- * [SWIFTUI_PREVIEWS]: struct MoreModuleView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group { MoreModuleView() }
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct MoreModuleView: View {
     var body: some View {
         MoreCardsGridView(showsHeader: true)

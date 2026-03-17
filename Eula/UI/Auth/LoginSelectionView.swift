@@ -1,23 +1,12 @@
 import SwiftUI
 
-/**
- * [INPUT]: 依赖 AppScreen, Assets (LoginLogoIcon, LoginEmailIcon_New, LoginNewIcon_New)
- * [OUTPUT]: 对外提供 LoginSelectionView
- * [POS]: UI/Auth 模块的核心入口，被 ContentView 或 App 根视图调用
- * [SWIFTUI_STATE]: @State private var isAgreementChecked: Bool - 协议勾选状态
- * [SWIFTUI_STATE]: @State private var showToast: Bool - 错误提示控制
- * [SWIFTUI_PREVIEWS]: struct LoginSelectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group { LoginSelectionView(onLoginSuccess: {}, onShowEmailLogin: {}, onShowEmailSignUp: {}, onShowEULA: {}) }
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct LoginSelectionView: View {
     @Binding var isAgreementChecked: Bool
     @State private var showToast = false
     
-    // 颜色常量 (Figma 1:1)
-    private let colorEmailBtn = Color(hexString: "81C8DC") // 辅助2
-    private let colorNewBtn = Color(hexString: "ACB1D7")   // 主色2
+    // Color constants (Figma 1:1)
+    private let colorEmailBtn = Color(hexString: "81C8DC")
+    private let colorNewBtn = Color(hexString: "ACB1D7")
     private let colorWhite = Color.white
     
     let onLoginSuccess: () -> Void
@@ -130,9 +119,8 @@ struct LoginSelectionView: View {
                 RoundedRectangle(cornerRadius: 40)
                     .stroke(Color.white.opacity(0.4), lineWidth: 2)
             )
-            // 内阴影模拟 (SwiftUI 不支持直接的 inset shadow，这里用 overlay 模拟简单的效果，或者省略以保持简洁)
             // Figma effect: inset 0px 4px 4px rgba(255,255,255,0.25)
-            // 简单的 overlay 模拟:
+            // Simple overlay-based approximation:
             .overlay(
                 RoundedRectangle(cornerRadius: 40)
                     .stroke(Color.white.opacity(0.25), lineWidth: 4)
@@ -146,7 +134,7 @@ struct LoginSelectionView: View {
     
     private var agreementSection: some View {
         HStack(spacing: 8) {
-            // 自定义复选框 (16x16, stroke 1px white)
+            // Custom checkbox (16x16, 1px white stroke)
             Button(action: {
                 isAgreementChecked.toggle()
             }) {
@@ -188,7 +176,7 @@ struct LoginSelectionView: View {
                 showToast = true
             }
             
-            // 2秒后自动隐藏
+            // Auto hide after 2 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 withAnimation {
                     showToast = false

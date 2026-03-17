@@ -43,7 +43,7 @@ struct DeleteAccountPopup: View {
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 40)
-                                .fill(Color(hexString: "FF8796")) // 主色1
+                                .fill(Color(hexString: "FF8796"))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 40)
                                         .stroke(Color.white.opacity(0.4), lineWidth: 2)
@@ -63,7 +63,7 @@ struct DeleteAccountPopup: View {
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 40)
-                                .fill(Color(hexString: "ACB1D7")) // 主色2
+                                .fill(Color(hexString: "ACB1D7"))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 40)
                                         .stroke(Color.white.opacity(0.4), lineWidth: 2)

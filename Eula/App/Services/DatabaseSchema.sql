@@ -1,5 +1,5 @@
--- 用户关系表 SQL 脚本
--- 在 Supabase SQL Editor 中执行
+-- User relationship table SQL script
+-- Run this in the Supabase SQL Editor
 
 BEGIN;
 

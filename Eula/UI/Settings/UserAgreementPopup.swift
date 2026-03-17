@@ -2,11 +2,7 @@ import SwiftUI
 
 struct UserAgreementView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var doc = AgreementDocument(
-        title: AgreementKind.userAgreement.defaultTitle,
-        content: AgreementKind.userAgreement.defaultContent,
-        updatedAt: nil
-    )
+    @State private var doc: AgreementDocument?
     @State private var isLoading = true
     @State private var errorText: String?
 
@@ -19,7 +15,7 @@ struct UserAgreementView: View {
                 ZStack(alignment: .top) {
                     AppScrollView(showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 16 * scale) {
-                            Text(doc.title)
+                            Text(doc?.title ?? "User Agreement")
                                 .font(.custom("Notable-Regular", size: 20 * scale))
                                 .foregroundStyle(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -35,7 +31,7 @@ struct UserAgreementView: View {
                                     .foregroundStyle(.white.opacity(0.7))
                             }
 
-                            Text(doc.content)
+                            Text(doc?.content ?? "")
                                 .font(.system(size: 14 * scale))
                                 .foregroundStyle(.white.opacity(0.85))
                                 .lineSpacing(4)
@@ -51,7 +47,7 @@ struct UserAgreementView: View {
                             dismiss()
                         }
 
-                        Text(doc.title)
+                        Text(doc?.title ?? "User Agreement")
                             .font(.custom("Notable-Regular", size: 20 * scale))
                             .foregroundStyle(.white)
 
@@ -72,21 +68,10 @@ struct UserAgreementView: View {
 
     @MainActor
     private func load() async {
-        if let cached = AgreementsService.shared.loadCached(kind: .userAgreement) {
-            doc = cached
-        }
-
         do {
             doc = try await AgreementsService.shared.fetchRemote(kind: .userAgreement)
             errorText = nil
         } catch {
-            if doc.content.isEmpty {
-                doc = AgreementDocument(
-                    title: AgreementKind.userAgreement.defaultTitle,
-                    content: AgreementKind.userAgreement.defaultContent,
-                    updatedAt: nil
-                )
-            }
             errorText = error.localizedDescription
         }
 
@@ -106,11 +91,7 @@ struct UserAgreementView_Previews: PreviewProvider {
 
 struct PrivacyPolicyView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var doc = AgreementDocument(
-        title: AgreementKind.privacyPolicy.defaultTitle,
-        content: AgreementKind.privacyPolicy.defaultContent,
-        updatedAt: nil
-    )
+    @State private var doc: AgreementDocument?
     @State private var isLoading = true
     @State private var errorText: String?
 
@@ -123,7 +104,7 @@ struct PrivacyPolicyView: View {
                 ZStack(alignment: .top) {
                     AppScrollView(showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 16 * scale) {
-                            Text(doc.title)
+                            Text(doc?.title ?? "Privacy Policy")
                                 .font(.custom("Notable-Regular", size: 20 * scale))
                                 .foregroundStyle(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -139,7 +120,7 @@ struct PrivacyPolicyView: View {
                                     .foregroundStyle(.white.opacity(0.7))
                             }
 
-                            Text(doc.content)
+                            Text(doc?.content ?? "")
                                 .font(.system(size: 14 * scale))
                                 .foregroundStyle(.white.opacity(0.85))
                                 .lineSpacing(4)
@@ -155,7 +136,7 @@ struct PrivacyPolicyView: View {
                             dismiss()
                         }
 
-                        Text(doc.title)
+                        Text(doc?.title ?? "Privacy Policy")
                             .font(.custom("Notable-Regular", size: 20 * scale))
                             .foregroundStyle(.white)
 
@@ -176,21 +157,10 @@ struct PrivacyPolicyView: View {
 
     @MainActor
     private func load() async {
-        if let cached = AgreementsService.shared.loadCached(kind: .privacyPolicy) {
-            doc = cached
-        }
-
         do {
             doc = try await AgreementsService.shared.fetchRemote(kind: .privacyPolicy)
             errorText = nil
         } catch {
-            if doc.content.isEmpty {
-                doc = AgreementDocument(
-                    title: AgreementKind.privacyPolicy.defaultTitle,
-                    content: AgreementKind.privacyPolicy.defaultContent,
-                    updatedAt: nil
-                )
-            }
             errorText = error.localizedDescription
         }
 

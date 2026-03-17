@@ -2,15 +2,10 @@ import SwiftUI
 import AVKit
 import UIKit
 
-/**
- * [INPUT]: 依赖 shorts_video (Assets Data Asset)
- * [OUTPUT]: 对外提供 ShortsView
- * [POS]: UI/Shorts/ShortsView.swift - 视频流浏览页面
- * [SWIFTUI_STATE]: @State private var isPlaying: Bool - 播放状态
- * [SWIFTUI_STATE]: @State private var player: AVPlayer? - 视频播放器实例
- * [PROTOCOL]: 遵循 Figma 设计还原 icon_play 与全屏视频交互
- */
 struct ShortsView: View {
+    private static var cachedBundledVideoURLs: [URL]?
+    private static var cachedFallbackVideoURL: URL?
+
     let isTabSelected: Bool
     
     @Environment(\.tabBarHiddenBinding) private var tabBarHiddenBinding
@@ -28,6 +23,7 @@ struct ShortsView: View {
     @State private var playbackStatusObservers: [Int: NSKeyValueObservation] = [:]
     @State private var isCommentsPresented = false
     @State private var commentsTargetID: ShortsItem.ID?
+    @State private var lastPlaybackSyncContext: PlaybackSyncContext?
     
     // Figma constants for icon_play
     private let iconSize: CGFloat = 80
@@ -35,10 +31,17 @@ struct ShortsView: View {
     // Color: rgba(255, 135, 150, 0.6) -> R:1, G:0.529, B:0.588
     private let iconColor = Color(red: 1.0, green: 135/255.0, blue: 150/255.0, opacity: 0.6)
 
-    private enum PlaybackIntent {
+    private enum PlaybackIntent: Equatable {
         case play
         case pauseKeep
         case stop
+    }
+
+    private struct PlaybackSyncContext: Equatable {
+        let intent: PlaybackIntent
+        let activeIndex: Int
+        let userWantsPlay: Bool
+        let hasItems: Bool
     }
     
     init(isTabSelected: Bool = true) {
@@ -49,13 +52,23 @@ struct ShortsView: View {
         NavigationStack(path: $path) {
             GeometryReader { proxy in
                 let scale = min(proxy.size.width / 393, proxy.size.height / 852)
-                let pages = makePages(proxy: proxy, scale: scale)
 
                 ZStack {
                     VerticalPageView(
-                        pages: pages,
-                        currentIndex: $activeIndex
-                    )
+                        pageCount: items.count,
+                        currentIndex: $activeIndex,
+                        activeIndex: activeIndex
+                    ) { index in
+                        AnyView(
+                            shortsPage(
+                                item: items[index],
+                                index: index,
+                                proxy: proxy,
+                                scale: scale,
+                                isActive: index == activeIndex
+                            )
+                        )
+                    }
                     .ignoresSafeArea()
                     
                     LinearGradient(
@@ -95,9 +108,12 @@ struct ShortsView: View {
             if !items.isEmpty {
                 activeIndex = min(max(0, activeIndex), items.count - 1)
             }
-            syncPlayback()
+            syncPlayback(force: true)
         }
-        .onDisappear { pauseKeepFrame() }
+        .onDisappear {
+            pauseKeepFrame()
+            lastPlaybackSyncContext = nil
+        }
         .onChange(of: path, perform: { _ in
             syncPlayback()
         })
@@ -117,20 +133,6 @@ struct ShortsView: View {
             syncPlayback()
         })
         .sheet(isPresented: $isCommentsPresented) { commentsSheet() }
-    }
-
-    private func makePages(proxy: GeometryProxy, scale: CGFloat) -> [AnyView] {
-        Array(items.enumerated()).map { index, item in
-            AnyView(
-                shortsPage(
-                    item: item,
-                    index: index,
-                    proxy: proxy,
-                    scale: scale,
-                    isActive: index == activeIndex
-                )
-            )
-        }
     }
 
     @ViewBuilder
@@ -236,8 +238,13 @@ struct ShortsView: View {
     }
 
     private func resolveBundledVideoURLs() -> [URL] {
+        if let cached = Self.cachedBundledVideoURLs {
+            return cached
+        }
+
         let dataAssetURLs = resolveVideoDataAssetURLs()
         if !dataAssetURLs.isEmpty {
+            Self.cachedBundledVideoURLs = dataAssetURLs
             return dataAssetURLs
         }
 
@@ -263,7 +270,9 @@ struct ShortsView: View {
             }
         }
 
-        return Array(Set(urls)).sorted { $0.lastPathComponent < $1.lastPathComponent }
+        let resolved = Array(Set(urls)).sorted { $0.lastPathComponent < $1.lastPathComponent }
+        Self.cachedBundledVideoURLs = resolved
+        return resolved
     }
 
     private func resolveVideoDataAssetURLs() -> [URL] {
@@ -285,12 +294,20 @@ struct ShortsView: View {
     }
 
     private func resolveFallbackVideoURL() -> URL? {
-        if let asset = resolveShortsVideoDataAsset() {
-            let baseDirectory = preferredVideoStorageDirectory()
-            return writeDataAssetToPlayableFile(data: asset.data, fileName: "shorts_video.mp4", preferredDirectory: baseDirectory)
+        if let cached = Self.cachedFallbackVideoURL {
+            return cached
         }
 
-        return Bundle.main.url(forResource: "shorts_video", withExtension: "mp4")
+        if let asset = resolveShortsVideoDataAsset() {
+            let baseDirectory = preferredVideoStorageDirectory()
+            let resolved = writeDataAssetToPlayableFile(data: asset.data, fileName: "shorts_video.mp4", preferredDirectory: baseDirectory)
+            Self.cachedFallbackVideoURL = resolved
+            return resolved
+        }
+
+        let resolved = Bundle.main.url(forResource: "shorts_video", withExtension: "mp4")
+        Self.cachedFallbackVideoURL = resolved
+        return resolved
     }
 
     private func resolveShortsVideoDataAsset() -> NSDataAsset? {
@@ -471,8 +488,19 @@ struct ShortsView: View {
         return .play
     }
 
-    private func syncPlayback() {
-        switch playbackIntent() {
+    private func syncPlayback(force: Bool = false) {
+        let context = PlaybackSyncContext(
+            intent: playbackIntent(),
+            activeIndex: activeIndex,
+            userWantsPlay: userWantsPlay,
+            hasItems: !items.isEmpty
+        )
+        if !force, context == lastPlaybackSyncContext {
+            return
+        }
+        lastPlaybackSyncContext = context
+
+        switch context.intent {
         case .play:
             loadItemsIfNeeded()
             if !items.isEmpty {
@@ -484,7 +512,9 @@ struct ShortsView: View {
             } else {
                 if userWantsPlay {
                     configureVideoAudioSession()
-                    players[activeIndex]?.playImmediately(atRate: 1.0)
+                    if players[activeIndex]?.timeControlStatus != .playing {
+                        players[activeIndex]?.playImmediately(atRate: 1.0)
+                    }
                     isPlaying = true
                 } else {
                     players[activeIndex]?.pause()
@@ -590,8 +620,10 @@ struct ShortsView: View {
 }
 
 private struct VerticalPageView: UIViewControllerRepresentable {
-    let pages: [AnyView]
+    let pageCount: Int
     @Binding var currentIndex: Int
+    let activeIndex: Int
+    let pageBuilder: (Int) -> AnyView
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -604,7 +636,11 @@ private struct VerticalPageView: UIViewControllerRepresentable {
         )
         controller.dataSource = context.coordinator
         controller.delegate = context.coordinator
-        context.coordinator.rebuildControllersIfNeeded(pages: pages)
+        context.coordinator.rebuildControllersIfNeeded(
+            pageCount: pageCount,
+            activeIndex: activeIndex,
+            pageBuilder: pageBuilder
+        )
         if let initial = context.coordinator.controller(at: currentIndex) {
             controller.setViewControllers([initial], direction: .forward, animated: false)
         }
@@ -613,7 +649,11 @@ private struct VerticalPageView: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: UIPageViewController, context: Context) {
         context.coordinator.parent = self
-        context.coordinator.rebuildControllersIfNeeded(pages: pages)
+        context.coordinator.rebuildControllersIfNeeded(
+            pageCount: pageCount,
+            activeIndex: activeIndex,
+            pageBuilder: pageBuilder
+        )
         context.coordinator.updateVisibleControllerIfNeeded(pageViewController: uiViewController)
     }
 
@@ -625,19 +665,23 @@ private struct VerticalPageView: UIViewControllerRepresentable {
             self.parent = parent
         }
 
-        func rebuildControllersIfNeeded(pages: [AnyView]) {
-            guard controllers.count != pages.count else {
-                for (index, page) in pages.enumerated() {
-                    guard let hosting = controllers[index] as? UIHostingController<AnyView> else { continue }
-                    hosting.rootView = page
+        func rebuildControllersIfNeeded(pageCount: Int, activeIndex: Int, pageBuilder: (Int) -> AnyView) {
+            guard controllers.count == pageCount else {
+                controllers = (0..<pageCount).map { index in
+                    let hosting = UIHostingController(rootView: pageBuilder(index))
+                    hosting.view.backgroundColor = .clear
+                    return hosting
                 }
                 return
             }
 
-            controllers = pages.map { page in
-                let hosting = UIHostingController(rootView: page)
-                hosting.view.backgroundColor = .clear
-                return hosting
+            guard !controllers.isEmpty else { return }
+            let target = min(max(0, activeIndex), controllers.count - 1)
+            let low = max(0, target - 1)
+            let high = min(controllers.count - 1, target + 1)
+            for index in low...high {
+                guard let hosting = controllers[index] as? UIHostingController<AnyView> else { continue }
+                hosting.rootView = pageBuilder(index)
             }
         }
 

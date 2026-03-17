@@ -1,15 +1,5 @@
 import SwiftUI
 
-/**
- * [INPUT]: 依赖 Assets (feed_img_1, feed_img_2, icon_heart_fill, avatar_1, avatar_2)
- * [OUTPUT]: 对外提供 MasonryFeedView
- * [POS]: UI/Home/Components 首页瀑布流 Feed
- * [SWIFTUI_STATE]: 无内部状态
- * [SWIFTUI_PREVIEWS]: struct MasonryFeedView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group { MasonryFeedView() }
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct MasonryFeedView: View {
     var body: some View {
         let items = Array(MockContent.moreCards.prefix(8))

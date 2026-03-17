@@ -413,27 +413,23 @@ struct TypingIndicator: View {
     let scale: CGFloat
     
     var body: some View {
-        HStack(spacing: 4 * scale) {
-            ForEach(0..<3, id: \.self) { index in
-                Circle()
-                    .fill(Color.white)
-                    .frame(width: 8 * scale, height: 8 * scale)
-                    .scaleEffect(animationScale(for: index))
-            }
-        }
-        .onAppear {
-            withAnimation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true)) {
-                animPhase = 1
+        TimelineView(.periodic(from: .now, by: 0.14)) { timeline in
+            let t = timeline.date.timeIntervalSinceReferenceDate
+            HStack(spacing: 4 * scale) {
+                ForEach(0..<3, id: \.self) { index in
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 8 * scale, height: 8 * scale)
+                        .scaleEffect(animationScale(for: index, phase: t))
+                }
             }
         }
     }
-    
-    @State private var animPhase: CGFloat = 0
-    
-    private func animationScale(for index: Int) -> CGFloat {
-        let delay = CGFloat(index) * 0.2
-        let phase = (animPhase + delay).truncatingRemainder(dividingBy: 1.0)
-        return 0.6 + 0.4 * sin(phase * .pi * 2)
+
+    private func animationScale(for index: Int, phase: TimeInterval) -> CGFloat {
+        let delay = Double(index) * 0.2
+        let progress = (phase + delay).truncatingRemainder(dividingBy: 1.0)
+        return 0.6 + 0.4 * sin(progress * .pi * 2)
     }
 }
 
@@ -638,7 +634,7 @@ struct VoiceWaveform: View {
             bar(heightFactor: 0.35)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .animation(.linear(duration: 0.08), value: level)
+        .animation(.linear(duration: 0.12), value: level)
     }
 
     private func bar(heightFactor: CGFloat) -> some View {
@@ -677,7 +673,7 @@ struct WeChatStylePlayingBars: View {
     let scale: CGFloat
 
     var body: some View {
-        TimelineView(.animation) { timeline in
+        TimelineView(.periodic(from: .now, by: 0.1)) { timeline in
             let t = timeline.date.timeIntervalSinceReferenceDate
             HStack(spacing: 2 * scale) {
                 bar(phase: t, offset: 0.0)
@@ -710,6 +706,7 @@ final class VoiceIO: NSObject, ObservableObject, AVAudioRecorderDelegate, AVAudi
     private var recorder: AVAudioRecorder?
     private var player: AVAudioPlayer?
     private var meterTimer: Timer?
+    private var lastPublishedSecond = 0
 
     var hasRecordPermission: Bool {
         if #available(iOS 17.0, *) {
@@ -762,6 +759,7 @@ final class VoiceIO: NSObject, ObservableObject, AVAudioRecorderDelegate, AVAudi
         self.recorder = recorder
         isRecording = true
         recordingDuration = 0
+        lastPublishedSecond = 0
         startMetering()
     }
 
@@ -831,16 +829,26 @@ final class VoiceIO: NSObject, ObservableObject, AVAudioRecorderDelegate, AVAudi
 
     private func startMetering() {
         meterTimer?.invalidate()
-        meterTimer = Timer.scheduledTimer(withTimeInterval: 0.08, repeats: true) { [weak self] _ in
+        meterTimer = Timer.scheduledTimer(withTimeInterval: 0.12, repeats: true) { [weak self] _ in
             guard let self else { return }
             guard let recorder else { return }
             recorder.updateMeters()
             let power = recorder.averagePower(forChannel: 0)
             let linear = pow(10, power / 20)
             let smoothed = min(1, max(0, linear))
-            self.level = CGFloat(smoothed)
-            self.recordingDuration = recorder.currentTime
+            let nextLevel = CGFloat(smoothed)
+            if abs(level - nextLevel) > 0.02 {
+                level = nextLevel
+            }
+
+            let currentTime = recorder.currentTime
+            let second = Int(currentTime.rounded(.down))
+            if second != lastPublishedSecond {
+                lastPublishedSecond = second
+                recordingDuration = currentTime
+            }
         }
+        meterTimer?.tolerance = 0.03
     }
 
     private func stopMetering() {
@@ -853,5 +861,11 @@ final class VoiceIO: NSObject, ObservableObject, AVAudioRecorderDelegate, AVAudi
             return "0s"
         }
         return "\(Int(ceil(recordingDuration)))s"
+    }
+
+    deinit {
+        stopMetering()
+        player?.stop()
+        recorder?.stop()
     }
 }

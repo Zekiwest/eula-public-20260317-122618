@@ -1,15 +1,5 @@
 import SwiftUI
 
-/**
- * [INPUT]: 依赖 Assets (trend_tailor_icon)
- * [OUTPUT]: 对外提供 NewestModuleView, TrendTailorButton
- * [POS]: UI/Home/Components 首页 "newest" 模块头部
- * [SWIFTUI_STATE]: 无内部状态
- * [SWIFTUI_PREVIEWS]: struct TrendBannerView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group { NewestModuleView() }
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct NewestModuleView: View {
     var body: some View {
         HStack {

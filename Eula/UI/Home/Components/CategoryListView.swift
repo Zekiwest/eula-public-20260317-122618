@@ -1,15 +1,5 @@
 import SwiftUI
 
-/**
- * [INPUT]: 依赖 Assets (cat_lipstick, cat_nail, cat_foundation), CategorySubpageView
- * [OUTPUT]: 对外提供 CategoryListView
- * [POS]: UI/Home/Components 首页分类列表
- * [SWIFTUI_STATE]: 无内部状态
- * [SWIFTUI_PREVIEWS]: struct CategoryListView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group { CategoryListView() }
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct CategoryListView: View {
     private var items: [CategoryItem] {
         MockCategories.home.map { data in

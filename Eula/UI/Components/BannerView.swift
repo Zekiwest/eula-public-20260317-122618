@@ -1,20 +1,11 @@
 import SwiftUI
-import Combine
 
-/**
- * [INPUT]: 依赖 SwiftUI
- * [OUTPUT]: 对外提供 BannerView
- * [POS]: UI/Components 通用轮播图组件
- * [SWIFTUI_STATE]: 使用 @Binding currentIndex 控制页码，内部 timer 驱动自动轮播
- * [SWIFTUI_PREVIEWS]: struct BannerView_Previews: PreviewProvider { static var previews: some View { 验证轮播效果
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct BannerView: View {
     let images: [String]
     let height: CGFloat
     @Binding var currentIndex: Int
-    
-    private let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var autoScrollToken = UUID()
     
     var body: some View {
         if images.isEmpty {
@@ -34,10 +25,22 @@ struct BannerView: View {
             .frame(maxWidth: .infinity)
             .frame(height: height)
             .ignoresSafeArea(edges: .top)
-            .onReceive(timer) { _ in
+            .task(id: autoScrollToken) {
                 guard images.count > 1 else { return }
-                withAnimation(.easeInOut) {
-                    currentIndex = (currentIndex + 1) % images.count
+                while !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: 3_000_000_000)
+                    guard !Task.isCancelled else { return }
+                    guard scenePhase == .active else { continue }
+                    await MainActor.run {
+                        withAnimation(.easeInOut) {
+                            currentIndex = (currentIndex + 1) % images.count
+                        }
+                    }
+                }
+            }
+            .onChange(of: scenePhase) { phase in
+                if phase == .active {
+                    autoScrollToken = UUID()
                 }
             }
         }

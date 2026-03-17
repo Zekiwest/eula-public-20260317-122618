@@ -1,16 +1,6 @@
 import SwiftUI
 import UIKit
 
-/**
- * [INPUT]: 依赖 MoreCardItem, Assets (EULA_BackIcon, more_detail_more, more_detail_dots, more_detail_heart, more_detail_author_avatar, more_detail_comment_icon)
- * [OUTPUT]: 对外提供 MoreCardDetailView
- * [POS]: UI/Home More 模块的详情页
- * [SWIFTUI_STATE]: 依赖 item 数据与 commentText/keyboardHeight/isInputFocused 状态
- * [SWIFTUI_PREVIEWS]: struct MoreCardDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group { MoreCardDetailView(item: .defaults[0]) }
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct MoreCardDetailView: View {
     let item: MoreCardItem
     @Environment(\.dismiss) private var dismiss
@@ -623,6 +613,9 @@ private struct ScrollViewBounceDisabler: UIViewRepresentable {
     final class Coordinator {
         weak var scrollView: UIScrollView?
         var observation: NSKeyValueObservation?
+        private var isSearching = false
+        private var searchAttempt = 0
+        private let maxSearchAttempts = 5
 
         func attach(to scrollView: UIScrollView) {
             if self.scrollView === scrollView {
@@ -634,9 +627,50 @@ private struct ScrollViewBounceDisabler: UIViewRepresentable {
             self.observation = scrollView.observe(\.contentOffset, options: [.new]) { scrollView, _ in
                 let minY = -scrollView.adjustedContentInset.top
                 if scrollView.contentOffset.y < minY {
-                    scrollView.contentOffset.y = minY
+                    scrollView.setContentOffset(
+                        CGPoint(x: scrollView.contentOffset.x, y: minY),
+                        animated: false
+                    )
                 }
             }
+        }
+
+        func attachIfNeeded(from uiView: UIView) {
+            guard scrollView == nil else { return }
+            guard !isSearching else { return }
+            isSearching = true
+            searchAttempt = 0
+            findAndAttach(from: uiView)
+        }
+
+        private func findAndAttach(from uiView: UIView) {
+            if let root = uiView.findRootSuperview() {
+                let scrollViews = root.findSubviews(ofType: UIScrollView.self)
+                if let target = scrollViews.first(where: { $0.isScrollEnabled }) {
+                    target.bounces = true
+                    target.alwaysBounceVertical = true
+                    target.alwaysBounceHorizontal = false
+                    target.refreshControl = nil
+                    attach(to: target)
+                    isSearching = false
+                    return
+                }
+            }
+
+            searchAttempt += 1
+            guard searchAttempt < maxSearchAttempts else {
+                isSearching = false
+                return
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self, weak uiView] in
+                guard let self, let uiView else { return }
+                self.findAndAttach(from: uiView)
+            }
+        }
+
+        deinit {
+            observation?.invalidate()
         }
     }
 
@@ -649,19 +683,7 @@ private struct ScrollViewBounceDisabler: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        for attempt in 0..<16 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + (0.03 * Double(attempt))) {
-                guard let root = uiView.findRootSuperview() else { return }
-                let scrollViews = root.findSubviews(ofType: UIScrollView.self)
-                guard let target = scrollViews.first(where: { $0.isScrollEnabled }) else { return }
-
-                target.bounces = true
-                target.alwaysBounceVertical = true
-                target.alwaysBounceHorizontal = false
-                target.refreshControl = nil
-                context.coordinator.attach(to: target)
-            }
-        }
+        context.coordinator.attachIfNeeded(from: uiView)
     }
 }
 

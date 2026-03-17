@@ -9,15 +9,6 @@
 import SwiftUI
 import Combine
 
-/**
- * [INPUT]: 依赖 AppScreen, MainTabView, HomeView, ShortsView, LoginSelectionView, EmailSignUpView, ForgotPasswordView, EULAView
- * [OUTPUT]: 应用的主界面，负责登录状态管理和 Tab 导航
- * [POS]: 根视图，被 xcodegameApp 调用
- * [SWIFTUI_STATE]: @State private var selectedTab: NavTab - 当前选中的 Tab
- * [SWIFTUI_STATE]: @ObservedObject var authManager - 登录状态管理器
- * [SWIFTUI_STATE]: @State private var authPath: [AuthRoute] - 认证导航路径
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct ContentView: View {
     @State private var selectedTab: NavTab = .home
     @ObservedObject private var authManager = AuthManager.shared

@@ -1,15 +1,5 @@
 import SwiftUI
 
-/**
- * [INPUT]: 依赖 AppScreen, AppBackButton, TrendTailorButton, Assets (EULA_BackIcon)
- * [OUTPUT]: 对外提供 CategorySubpageView
- * [POS]: UI/Home 分类子页面，复用登录背景与 TrendTailor AI 入口
- * [SWIFTUI_STATE]: @Environment(\.dismiss) dismiss - 控制返回
- * [SWIFTUI_PREVIEWS]: struct CategorySubpageView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group { CategorySubpageView(title: "Lipstick") }
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct CategorySubpageView: View {
     let title: String
     @Environment(\.dismiss) private var dismiss

@@ -128,7 +128,7 @@ struct WalletRechargeView: View {
             let products = try await WalletIAPService.shared.loadProducts(productIDs: productIDs)
             productPriceByID = Dictionary(uniqueKeysWithValues: products.map { ($0.id, $0.displayPrice) })
         } catch {
-            ToastManager.shared.show("内购商品加载失败")
+            ToastManager.shared.show("Failed to load in-app purchase products")
         }
     }
 
@@ -142,15 +142,15 @@ struct WalletRechargeView: View {
         let selectedOption = options[selectedOptionIndex]
         do {
             try await WalletIAPService.shared.purchase(productID: selectedOption.productID)
-            ToastManager.shared.show("充值成功")
+            ToastManager.shared.show("Top-up successful")
             await loadCoinsIfNeeded()
         } catch WalletIAPError.userCancelled {
         } catch WalletIAPError.pending {
-            ToastManager.shared.show("支付处理中")
+            ToastManager.shared.show("Payment is pending")
         } catch WalletIAPError.productNotFound {
-            ToastManager.shared.show("商品不可用")
+            ToastManager.shared.show("Product unavailable")
         } catch {
-            ToastManager.shared.show("充值失败，请稍后重试")
+            ToastManager.shared.show("Top-up failed, please try again later")
         }
     }
 

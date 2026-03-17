@@ -1,12 +1,3 @@
-/**
- * [INPUT]: 依赖 Assets.xcassets 中的 EULA_BackIcon
- * [OUTPUT]: 对外提供 AppBackground, AppScreen, AppScrollView, AppBackButton
- * [POS]: UI/Components 的核心背景组件，被全局使用
- * [SWIFTUI_STATE]: 无内部状态，纯静态展示
- * [SWIFTUI_PREVIEWS]: struct AppBackground_Previews: PreviewProvider { static var previews: some View { 验证 iPhone 尺寸适配
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
-
 import SwiftUI
 
 struct AppBackground: View {
@@ -21,7 +12,7 @@ struct AppBackground: View {
             #if targetEnvironment(simulator)
             let blurQualityScale: CGFloat = 0.45
             #else
-            let blurQualityScale: CGFloat = 1
+            let blurQualityScale: CGFloat = 0.72
             #endif
             
             ZStack(alignment: .topLeading) {
@@ -73,7 +64,6 @@ struct AppBackground: View {
             }
             .frame(width: width, height: height)
             .clipped() // Ensure content doesn't bleed out
-            .drawingGroup()
         }
         .ignoresSafeArea()
     }

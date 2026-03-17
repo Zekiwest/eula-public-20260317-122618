@@ -11,14 +11,12 @@ struct ReportPopup: View {
     private let height: CGFloat = 452
     
     var body: some View {
-        ZStack {
-            Image("TermsofUse_bg")
-                .resizable(capInsets: EdgeInsets(top: 180, leading: 0, bottom: 150, trailing: 0), resizingMode: .stretch)
-                .frame(width: width, height: height)
+        AppPopupScaffold(width: width, height: height) {
+            Color.clear
                 .onTapGesture {
                     isFocused = false
                 }
-            
+
             VStack(spacing: 20) {
                 Text("Are you sure you want to report this content? Please provide a brief reason for your report.")
                     .font(.system(size: 16, weight: .regular))
@@ -66,58 +64,26 @@ struct ReportPopup: View {
                 )
                 
                 VStack(spacing: 16) {
-                    Button(action: {
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    AppPopupActionButton(
+                        title: "Submit Report",
+                        color: Color(hexString: "81C8DC"),
+                        width: 232,
+                        height: 58,
+                        fontSize: 14,
+                        hasInnerHighlight: true
+                    ) {
                         onSubmit(reasonText)
-                    }) {
-                        Text("Submit Report")
-                            .font(.custom("Notable-Regular", size: 14))
-                            .foregroundColor(.white)
-                            .frame(width: 232, height: 58)
-                            .background(Color(hexString: "81C8DC"))
-                            .cornerRadius(40)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 40)
-                                    .stroke(Color.white.opacity(0.4), lineWidth: 2)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 40)
-                                    .stroke(Color.white.opacity(0.25), lineWidth: 4)
-                                    .blur(radius: 2)
-                                    .offset(y: 2)
-                                    .mask(
-                                        RoundedRectangle(cornerRadius: 40)
-                                            .fill(LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom))
-                                    )
-                                    .allowsHitTesting(false)
-                            )
                     }
                     
-                    Button(action: {
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    AppPopupActionButton(
+                        title: "Cancel",
+                        color: Color(hexString: "ACB1D7"),
+                        width: 232,
+                        height: 58,
+                        fontSize: 14,
+                        hasInnerHighlight: true
+                    ) {
                         onCancel()
-                    }) {
-                        Text("Cancel")
-                            .font(.custom("Notable-Regular", size: 14))
-                            .foregroundColor(.white)
-                            .frame(width: 232, height: 58)
-                            .background(Color(hexString: "ACB1D7"))
-                            .cornerRadius(40)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 40)
-                                    .stroke(Color.white.opacity(0.4), lineWidth: 2)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 40)
-                                    .stroke(Color.white.opacity(0.25), lineWidth: 4)
-                                    .blur(radius: 2)
-                                    .offset(y: 2)
-                                    .mask(
-                                        RoundedRectangle(cornerRadius: 40)
-                                            .fill(LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom))
-                                    )
-                                    .allowsHitTesting(false)
-                            )
                     }
                 }
             }

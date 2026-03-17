@@ -268,7 +268,7 @@ struct OtherProfileView: View {
             }
             dismiss()
         } else {
-            ToastManager.shared.show("需要互相关注才能聊天")
+            ToastManager.shared.show("Mutual follow is required to chat")
         }
     }
 }

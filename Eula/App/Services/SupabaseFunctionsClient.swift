@@ -93,6 +93,16 @@ struct SupabaseFunctionsClient {
 struct SupabaseRESTClient {
     let supabaseURL: URL
     let anonKey: String
+    private static let fractionalISO8601Formatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter
+    }()
+    private static let standardISO8601Formatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter
+    }()
 
     func get<Response: Decodable>(
         table: String,
@@ -113,7 +123,20 @@ struct SupabaseRESTClient {
         }
 
         let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
+        decoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let value = try container.decode(String.self)
+            if let date = SupabaseRESTClient.fractionalISO8601Formatter.date(from: value) {
+                return date
+            }
+            if let date = SupabaseRESTClient.standardISO8601Formatter.date(from: value) {
+                return date
+            }
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Invalid ISO8601 date: \(value)"
+            )
+        }
         return try decoder.decode(Response.self, from: data)
     }
 
@@ -159,54 +182,6 @@ struct SupabaseRESTClient {
 enum AgreementKind: String {
     case userAgreement = "user_agreement"
     case privacyPolicy = "privacy_policy"
-
-    var defaultTitle: String {
-        switch self {
-        case .userAgreement:
-            "User Agreement"
-        case .privacyPolicy:
-            "Privacy Policy"
-        }
-    }
-
-    var defaultContent: String {
-        switch self {
-        case .userAgreement:
-            """
-Welcome to Glame! To make a better place, the following content is not allowed in the app in particular.
-
-1. Any content about child harm, pornography related detrimental to children.
-
-2. Fake and harmful messages about recent or current events.
-
-3. Any violence, bullying content, publicly promotes pornography and other content.
-
-If we find any content including and not limited to the above violations your content will be deleted and account will be banned.
-"""
-        case .privacyPolicy:
-            """
-We respect your privacy. This Privacy Policy describes how we collect, use, and protect information when you use the app.
-
-1. Information we collect
-We may collect information you provide (such as profile details), content you create, and basic usage data to operate and improve the app.
-
-2. How we use information
-We use information to provide core features, maintain safety, personalize your experience, and improve product performance.
-
-3. Sharing
-We do not sell your personal information. We may share information with service providers to run the app, or when required by law.
-
-4. Data retention
-We keep information only as long as necessary for the purposes described, unless a longer retention period is required by law.
-
-5. Your choices
-You can manage certain settings in the app. You may also request deletion of your account where available.
-
-6. Updates
-We may update this policy from time to time. Continued use of the app means you accept the updated policy.
-"""
-        }
-    }
 }
 
 struct AgreementDocument: Codable, Equatable {
@@ -222,16 +197,6 @@ struct AgreementsService {
         supabaseURL: AppConfig.supabaseURL,
         anonKey: AppConfig.supabaseAnonKey
     )
-
-    private let defaults = UserDefaults.standard
-
-    func loadCached(kind: AgreementKind) -> AgreementDocument? {
-        let key = cacheKey(for: kind)
-        guard let data = defaults.data(forKey: key) else { return nil }
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        return try? decoder.decode(AgreementDocument.self, from: data)
-    }
 
     func fetchRemote(kind: AgreementKind) async throws -> AgreementDocument {
         struct Row: Decodable {
@@ -251,29 +216,20 @@ struct AgreementsService {
         )
 
         guard let row = rows.first else {
-            return AgreementDocument(title: kind.defaultTitle, content: kind.defaultContent, updatedAt: nil)
+            throw SupabaseFunctionsClient.ClientError.httpStatus(404, "Missing legal document: \(kind.rawValue)")
+        }
+        guard let title = row.title?.trimmingCharacters(in: .whitespacesAndNewlines), !title.isEmpty else {
+            throw SupabaseFunctionsClient.ClientError.httpStatus(422, "Missing title for legal document: \(kind.rawValue)")
+        }
+        guard let content = row.content?.trimmingCharacters(in: .whitespacesAndNewlines), !content.isEmpty else {
+            throw SupabaseFunctionsClient.ClientError.httpStatus(422, "Missing content for legal document: \(kind.rawValue)")
         }
 
-        let doc = AgreementDocument(
-            title: (row.title?.isEmpty == false ? row.title : kind.defaultTitle) ?? kind.defaultTitle,
-            content: (row.content?.isEmpty == false ? row.content : kind.defaultContent) ?? kind.defaultContent,
+        return AgreementDocument(
+            title: title,
+            content: content,
             updatedAt: row.updated_at
         )
-
-        saveCache(kind: kind, doc: doc)
-        return doc
-    }
-
-    private func saveCache(kind: AgreementKind, doc: AgreementDocument) {
-        let key = cacheKey(for: kind)
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        guard let data = try? encoder.encode(doc) else { return }
-        defaults.set(data, forKey: key)
-    }
-
-    private func cacheKey(for kind: AgreementKind) -> String {
-        "agreements.cache.\(kind.rawValue)"
     }
 }
 

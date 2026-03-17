@@ -25,11 +25,7 @@ struct ReportReasonPopup: View {
     }
     
     var body: some View {
-        ZStack {
-            Image("TermsofUse_bg")
-                .resizable(capInsets: EdgeInsets(top: 180, leading: 0, bottom: 150, trailing: 0), resizingMode: .stretch)
-                .frame(width: 343, height: 585)
-            
+        AppPopupScaffold(height: 585) {
             VStack(spacing: 0) {
                 Text("Please select the reason for reporting this user:")
                     .font(.system(size: 14))
@@ -85,47 +81,34 @@ struct ReportReasonPopup: View {
                 .padding(.top, 20)
                 
                 VStack(spacing: 16) {
-                    Button(action: {
+                    AppPopupActionButton(
+                        title: "Submit Report",
+                        color: Color(hexString: "81C8DC"),
+                        width: 232,
+                        height: 58,
+                        fontSize: 14
+                    ) {
                         withAnimation {
                             isPresented = false
                         }
-                    }) {
-                        Text("Submit Report")
-                            .font(.custom("Notable-Regular", size: 14))
-                            .foregroundStyle(.white)
-                            .frame(width: 232, height: 58)
-                            .background(Color(hexString: "81C8DC"))
-                            .clipShape(RoundedRectangle(cornerRadius: 40))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 40)
-                                    .stroke(Color.white.opacity(0.4), lineWidth: 2)
-                            )
-                            .shadow(color: .white.opacity(0.25), radius: 4, x: 0, y: 4)
                     }
                     
-                    Button(action: {
+                    AppPopupActionButton(
+                        title: "Cancel",
+                        color: Color(hexString: "ACB1D7"),
+                        width: 232,
+                        height: 58,
+                        fontSize: 14
+                    ) {
                         withAnimation {
                             isPresented = false
                         }
-                    }) {
-                        Text("Cancel")
-                            .font(.custom("Notable-Regular", size: 14))
-                            .foregroundStyle(.white)
-                            .frame(width: 232, height: 58)
-                            .background(Color(hexString: "ACB1D7"))
-                            .clipShape(RoundedRectangle(cornerRadius: 40))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 40)
-                                    .stroke(Color.white.opacity(0.4), lineWidth: 2)
-                            )
-                            .shadow(color: .white.opacity(0.25), radius: 4, x: 0, y: 4)
                     }
                 }
                 .padding(.top, 16)
                 
                 Spacer()
             }
-            .frame(width: 343, height: 585)
         }
     }
 }

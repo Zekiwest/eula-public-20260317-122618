@@ -1,20 +1,14 @@
 import SwiftUI
 
-/**
- * [INPUT]: 依赖 AppScreen, AppBackButton, Assets (EULA_Illustration, EULA_BackIcon, TermsofUse_bg)
- * [OUTPUT]: 对外提供 EULAView
- * [POS]: UI/Auth 模块的 EULA 协议展示页
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct EULAView: View {
     let onBack: () -> Void
     let onSure: () -> Void
     
-    // 颜色常量 (Figma 1:1)
-    private let colorCancelBtn = Color(hexString: "FF8796") // 主色1
-    private let colorSureBtn = Color(hexString: "ACB1D7")   // 主色2
+    // Color constants (Figma 1:1)
+    private let colorCancelBtn = Color(hexString: "FF8796")
+    private let colorSureBtn = Color(hexString: "ACB1D7")
     private let colorText = Color.black
-    private let colorLinks = Color(hexString: "1ACDFF") // 辅助色
+    private let colorLinks = Color(hexString: "1ACDFF")
     
     var body: some View {
         GeometryReader { geometry in
@@ -137,7 +131,7 @@ By tapping “Agree,” you accept the Terms of Use and Privacy Policy.
                 }
             }
         }
-        .ignoresSafeArea(.all, edges: .all) // 让 GeometryReader 读取全屏尺寸，我们自己处理 safeArea
+        .ignoresSafeArea(.all, edges: .all)
         .navigationBarHidden(true)
     }
 }

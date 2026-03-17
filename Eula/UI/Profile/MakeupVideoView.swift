@@ -13,6 +13,7 @@ struct MakeupVideoView: View {
     @State private var comments: [Comment] = MockComments.detail
     @State private var isCommentsPresented = false
     @State private var isDismissing = false
+    @State private var playerLoopObserver: NSObjectProtocol?
     
     // Figma constants for icon_play
     private let iconSize: CGFloat = 80
@@ -151,6 +152,10 @@ struct MakeupVideoView: View {
         }
         .onDisappear {
             player?.pause()
+            if let playerLoopObserver {
+                NotificationCenter.default.removeObserver(playerLoopObserver)
+                self.playerLoopObserver = nil
+            }
             tabBarHiddenBinding?.wrappedValue = false
         }
         .sheet(isPresented: $isCommentsPresented) {
@@ -176,9 +181,13 @@ struct MakeupVideoView: View {
         let playerItem = AVPlayerItem(url: videoURL)
         let newPlayer = AVPlayer(playerItem: playerItem)
         newPlayer.actionAtItemEnd = .none // Prevent pause at end
-        
-        // Loop observer
-        NotificationCenter.default.addObserver(
+
+        if let playerLoopObserver {
+            NotificationCenter.default.removeObserver(playerLoopObserver)
+            self.playerLoopObserver = nil
+        }
+
+        playerLoopObserver = NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
             object: playerItem,
             queue: .main

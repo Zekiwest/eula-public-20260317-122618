@@ -1,2 +1,2 @@
 # eula
-一个关于美妆的应用
+A beauty-focused application.

@@ -1,14 +1,6 @@
 import SwiftUI
 import Foundation
 
-/**
- * [INPUT]: 依赖 AppScreen, AppBackButton, Assets (EULA_BackIcon, SignInDecoration)
- * [OUTPUT]: 对外提供 EmailSignUpView
- * [POS]: UI/Auth 的邮箱登录/注册页与背景视图，被 ContentView 调用
- * [SWIFTUI_STATE]: @State email/password/confirmPassword/showToast/toastMessage; @FocusState focusedField
- * [SWIFTUI_PREVIEWS]: PreviewProvider 默认状态预览
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct EmailSignUpView: View {
     enum AuthMode {
         case login

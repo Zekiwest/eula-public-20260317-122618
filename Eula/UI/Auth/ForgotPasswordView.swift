@@ -1,13 +1,5 @@
 import SwiftUI
 
-/**
- * [INPUT]: 依赖 AppScreen, AppBackButton, AuthToastOverlay, AuthValidator, Assets (EULA_BackIcon)
- * [OUTPUT]: 对外提供 ForgotPasswordView
- * [POS]: UI/Auth 的找回密码页，被 ContentView 调用
- * [SWIFTUI_STATE]: @State email/password/confirmPassword/showToast/toastMessage; @FocusState focusedField
- * [SWIFTUI_PREVIEWS]: PreviewProvider 默认状态预览
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 struct ForgotPasswordView: View {
     enum FocusField {
         case email

@@ -141,20 +141,13 @@ private struct BlockedListPopup: View {
     @EnvironmentObject private var blockedUsersStore: BlockedUsersStore
     
     var body: some View {
-        ZStack {
-            // Background
-            Image("TermsofUse_bg")
-                .resizable(capInsets: EdgeInsets(top: 180, leading: 0, bottom: 150, trailing: 0), resizingMode: .stretch)
-                .frame(width: 343, height: 452)
-            
+        AppPopupScaffold(height: 452) {
             VStack(spacing: 0) {
-                // Title
                 Text("Blocked List")
-                    .font(.system(size: 16, weight: .bold)) // Poppins 16 equivalent
+                    .font(.system(size: 16, weight: .bold))
                     .foregroundStyle(.black)
                     .padding(.top, 40)
                 
-                // List
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
                         let users = blockedUsersStore.users
@@ -196,30 +189,21 @@ private struct BlockedListPopup: View {
                     }
                     .padding(.top, 20)
                 }
-                .frame(height: 280) // Adjust as needed
+                .frame(height: 280)
                 
                 Spacer()
                 
-                // Close Button
-                Button(action: {
-                    impactFeedback()
+                AppPopupActionButton(
+                    title: "Close",
+                    color: Color(hexString: "ACB1D7"),
+                    width: 128,
+                    height: 48,
+                    fontSize: 14
+                ) {
                     isPresented = false
-                }) {
-                    Text("Close") 
-                        .font(.custom("Notable-Regular", size: 14))
-                        .foregroundStyle(.white)
-                        .frame(width: 128, height: 48) // Match Figma button size
-                        .background(Color(hexString: "ACB1D7")) // 主色2
-                        .clipShape(RoundedRectangle(cornerRadius: 40))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 40)
-                                .stroke(Color.white.opacity(0.4), lineWidth: 2)
-                        )
-                        .shadow(color: .white.opacity(0.25), radius: 4, x: 0, y: 4) // Inner shadow approx
                 }
                 .padding(.bottom, 40)
             }
-            .frame(width: 343, height: 452)
         }
     }
 }

@@ -1,10 +1,3 @@
-/**
- * [INPUT]: 无
- * [OUTPUT]: 对外提供 Color(hexString:) 等基础扩展
- * [POS]: Utils/Extensions.swift, 全局工具箱
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
-
 import SwiftUI
 import UIKit
 import Combine

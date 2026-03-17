@@ -2,16 +2,6 @@
 import SwiftUI
 import UIKit
 
-/**
- * [INPUT]: 依赖 Assets 与 MainTabIcons.json 的图标映射
- * [OUTPUT]: 对外提供 MainTabView 组件
- * [POS]: UI/MainTabView.swift - 应用的主导航栏
- * [SWIFTUI_STATE]: @Binding var selectedTab: NavTab - 控制当前选中的 Tab
- * [SWIFTUI_PREVIEWS]: struct MainTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group { MainTabView(selectedTab: .constant(.home)) }
- * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
- */
 private struct TabIconPair: Decodable {
     let off: String
     let on: String
@@ -175,21 +165,21 @@ struct TabItem: View {
                 }
             }
         } label: {
-            // 布局层：完全透明的刚性骨架，确保布局绝对稳定
+            // Layout layer: rigid transparent skeleton for stable layout
             Color.clear
                 .frame(height: 56)
                 .frame(maxWidth: .infinity)
                 .contentShape(Rectangle())
                 .overlay {
-                    // 内容层：悬浮于骨架之上，尺寸变化不影响布局
+                    // Content layer: floating above skeleton without affecting layout
                     if isSelected && enableSelectionEffect {
-                        // 选中态：直接展示 iconOn，移除 Shadow
+                        // Selected state: show iconOn directly without shadow
                         Image(iconOn)
                             .resizable()
                             .scaledToFit()
                             .frame(width: onSize, height: onSize)
                     } else {
-                        // 普通态
+                        // Default state
                         Image(isSelected ? iconOn : iconOff)
                             .resizable()
                             .scaledToFit()
