@@ -84,7 +84,11 @@ struct SupabaseFunctionsClient {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(trimmedKey, forHTTPHeaderField: "apikey")
-        request.setValue("Bearer \(trimmedKey)", forHTTPHeaderField: "Authorization")
+        if let accessToken = AuthManager.shared.accessToken, !accessToken.isEmpty {
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        } else {
+            request.setValue("Bearer \(trimmedKey)", forHTTPHeaderField: "Authorization")
+        }
         request.httpBody = body
         return request
     }

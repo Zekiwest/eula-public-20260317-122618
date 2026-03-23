@@ -15,6 +15,7 @@ struct ChatBackend {
     ) async throws -> ChatReply {
         let req = ChatRequest(
             device_id: DeviceIdentity.deviceID(),
+            user_id: AuthManager.shared.currentUserId,
             conversation_id: conversationID,
             persona_key: personaKey,
             message_cost_coins: AppConfig.chatMessageCostCoins,
@@ -32,6 +33,7 @@ struct ChatBackend {
     ) async throws {
         let req = ChatRequest(
             device_id: DeviceIdentity.deviceID(),
+            user_id: AuthManager.shared.currentUserId,
             conversation_id: conversationID,
             persona_key: personaKey,
             message_cost_coins: messageCostCoins,
@@ -68,14 +70,46 @@ struct ChatBackend {
     func walletBalance() async throws -> Int {
         let reply: WalletBalanceReply = try await client.call(
             function: "wallet",
-            body: WalletBalanceRequest(device_id: DeviceIdentity.deviceID())
+            body: WalletBalanceRequest(
+                device_id: DeviceIdentity.deviceID(),
+                user_id: AuthManager.shared.currentUserId
+            )
+        )
+        return reply.coins
+    }
+
+    func applyWalletTopup(
+        productID: String,
+        transactionID: String,
+        originalTransactionID: String
+    ) async throws -> Int {
+        let reply: WalletBalanceReply = try await client.call(
+            function: "wallet",
+            body: WalletTopupRequest(
+                device_id: DeviceIdentity.deviceID(),
+                user_id: AuthManager.shared.currentUserId,
+                product_id: productID,
+                transaction_id: transactionID,
+                original_transaction_id: originalTransactionID
+            )
         )
         return reply.coins
     }
 }
 
 private struct WalletBalanceRequest: Codable {
+    let action = "balance"
     let device_id: String
+    let user_id: String?
+}
+
+private struct WalletTopupRequest: Codable {
+    let action = "topup"
+    let device_id: String
+    let user_id: String?
+    let product_id: String
+    let transaction_id: String
+    let original_transaction_id: String
 }
 
 private struct WalletBalanceReply: Codable {
@@ -94,6 +128,7 @@ struct ChatHistoryMessage: Codable {
 
 struct ChatRequest: Codable {
     let device_id: String
+    let user_id: String?
     let conversation_id: String
     let persona_key: String
     let message_cost_coins: Int
@@ -102,6 +137,7 @@ struct ChatRequest: Codable {
 
     init(
         device_id: String,
+        user_id: String?,
         conversation_id: String,
         persona_key: String,
         message_cost_coins: Int,
@@ -109,6 +145,7 @@ struct ChatRequest: Codable {
         stream: Bool? = nil
     ) {
         self.device_id = device_id
+        self.user_id = user_id
         self.conversation_id = conversation_id
         self.persona_key = persona_key
         self.message_cost_coins = message_cost_coins

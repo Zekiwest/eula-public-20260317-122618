@@ -6,6 +6,7 @@ enum WalletIAPError: LocalizedError {
     case pending
     case userCancelled
     case verificationFailed
+    case creditingFailed
 
     var errorDescription: String? {
         switch self {
@@ -17,6 +18,8 @@ enum WalletIAPError: LocalizedError {
             return "Purchase cancelled."
         case .verificationFailed:
             return "Purchase verification failed."
+        case .creditingFailed:
+            return "Top-up crediting failed."
         }
     }
 }
@@ -40,6 +43,15 @@ actor WalletIAPService {
         switch result {
         case .success(let verification):
             let transaction = try verify(verification)
+            do {
+                _ = try await ChatBackend.shared.applyWalletTopup(
+                    productID: productID,
+                    transactionID: String(transaction.id),
+                    originalTransactionID: String(transaction.originalID)
+                )
+            } catch {
+                throw WalletIAPError.creditingFailed
+            }
             await transaction.finish()
         case .pending:
             throw WalletIAPError.pending
@@ -48,10 +60,6 @@ actor WalletIAPService {
         @unknown default:
             throw WalletIAPError.verificationFailed
         }
-    }
-
-    func restorePurchases() async throws {
-        try await AppStore.sync()
     }
 
     private func resolveProduct(productID: String) async throws -> Product {
