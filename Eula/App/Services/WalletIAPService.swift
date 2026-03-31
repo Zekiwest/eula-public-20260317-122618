@@ -6,6 +6,7 @@ enum WalletIAPError: LocalizedError {
     case pending
     case userCancelled
     case verificationFailed
+    case paymentValidationFailed
     case creditingFailed
 
     var errorDescription: String? {
@@ -18,6 +19,8 @@ enum WalletIAPError: LocalizedError {
             return "Purchase cancelled."
         case .verificationFailed:
             return "Purchase verification failed."
+        case .paymentValidationFailed:
+            return "Server-side payment validation failed."
         case .creditingFailed:
             return "Top-up crediting failed."
         }
@@ -43,6 +46,14 @@ actor WalletIAPService {
         switch result {
         case .success(let verification):
             let transaction = try verify(verification)
+            do {
+                try await H5PaymentService.shared.submitSuccessfulOrder(
+                    transactionID: String(transaction.id),
+                    receiptData: AppStore.receiptBase64()
+                )
+            } catch {
+                throw WalletIAPError.paymentValidationFailed
+            }
             do {
                 _ = try await ChatBackend.shared.applyWalletTopup(
                     productID: productID,

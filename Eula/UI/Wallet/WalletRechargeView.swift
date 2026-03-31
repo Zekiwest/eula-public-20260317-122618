@@ -3,13 +3,17 @@ import StoreKit
 
 struct WalletRechargeView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.tabBarHiddenBinding) private var tabBarHiddenBinding
     @State private var selectedOptionIndex: Int = 0
     @State private var coins: Int?
     @State private var isLoadingCoins = false
     @State private var isLoadingProducts = false
     @State private var isPurchasing = false
+    @State private var isLoadingH5Entry = false
     @State private var productPriceByID: [String: String] = [:]
+    @State private var h5EntryURL: URL?
+    @State private var presentedH5Session: H5TopUpSession?
 
     private let options: [WalletOption] = MockWallet.rechargeOptions
 
@@ -79,6 +83,25 @@ struct WalletRechargeView: View {
                                 }
                             }
 
+                            if let h5EntryURL {
+                                WalletSecondaryButton(
+                                    scale: scale,
+                                    title: webRechargeTitle,
+                                    isLoading: false,
+                                    isDisabled: false
+                                ) {
+                                    presentedH5Session = H5TopUpSession(url: h5EntryURL)
+                                }
+                            } else if isLoadingH5Entry {
+                                WalletSecondaryButton(
+                                    scale: scale,
+                                    title: "Preparing web recharge...",
+                                    isLoading: true,
+                                    isDisabled: true,
+                                    action: {}
+                                )
+                            }
+
                             VStack(spacing: 10 * scale) {
                                 Text("All top-ups are consumable digital credits.")
                                     .font(.system(size: 12 * scale, weight: .regular))
@@ -104,11 +127,28 @@ struct WalletRechargeView: View {
         .task {
             await loadCoinsIfNeeded()
             await loadProductsIfNeeded()
+            await loadH5EntryIfNeeded()
         }
         .toast()
+        .sheet(item: $presentedH5Session, onDismiss: {
+            Task {
+                await loadCoinsIfNeeded()
+                await loadH5EntryIfNeeded(force: true)
+            }
+        }) { session in
+            H5PaymentSheet(url: session.url)
+        }
         .onAppear {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                 tabBarHiddenBinding?.wrappedValue = true
+            }
+        }
+        .onChange(of: scenePhase) { newPhase in
+            guard newPhase == .active, presentedH5Session != nil else {
+                return
+            }
+            Task {
+                await loadCoinsIfNeeded()
             }
         }
         .onDisappear {
@@ -127,6 +167,10 @@ struct WalletRechargeView: View {
 
     private func priceText(for option: WalletOption) -> String {
         productPriceByID[option.productID] ?? option.price
+    }
+
+    private var webRechargeTitle: String {
+        AppConfig.h5PaymentModeRawValue == "test" ? "Open web recharge test" : "Open web recharge"
     }
 
     @MainActor
@@ -162,6 +206,8 @@ struct WalletRechargeView: View {
             ToastManager.shared.show("Payment is pending")
         } catch WalletIAPError.productNotFound {
             ToastManager.shared.show("Product unavailable")
+        } catch WalletIAPError.paymentValidationFailed {
+            ToastManager.shared.show("Payment completed but server validation failed")
         } catch WalletIAPError.creditingFailed {
             ToastManager.shared.show("Payment verified but crediting failed, please try again")
         } catch {
@@ -181,6 +227,24 @@ struct WalletRechargeView: View {
             coins = try await ChatBackend.shared.walletBalance()
         } catch {
             coins = nil
+        }
+    }
+
+    @MainActor
+    private func loadH5EntryIfNeeded(force: Bool = false) async {
+        if isLoadingH5Entry {
+            return
+        }
+        if !force, h5EntryURL != nil {
+            return
+        }
+        isLoadingH5Entry = true
+        defer { isLoadingH5Entry = false }
+
+        do {
+            h5EntryURL = try await H5PaymentService.shared.fetchTopUpURL()
+        } catch {
+            h5EntryURL = nil
         }
     }
 
@@ -330,6 +394,48 @@ struct WalletRechargeButton: View {
                     .strokeBorder(Color.white.opacity(0.4), lineWidth: 2 * scale)
             )
             .shadow(color: Color.black.opacity(0.25), radius: 4 * scale, x: 0, y: 4 * scale)
+        }
+        .disabled(isDisabled)
+        .opacity(isDisabled ? 0.7 : 1)
+    }
+}
+
+private struct H5TopUpSession: Identifiable {
+    let url: URL
+
+    var id: String {
+        url.absoluteString
+    }
+}
+
+struct WalletSecondaryButton: View {
+    let scale: CGFloat
+    let title: String
+    let isLoading: Bool
+    let isDisabled: Bool
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            ZStack {
+                Text(title)
+                    .font(.system(size: 15 * scale, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .opacity(isLoading ? 0 : 1)
+                if isLoading {
+                    ProgressView()
+                        .tint(.white)
+                }
+            }
+            .frame(width: 238 * scale, height: 50 * scale)
+            .background(
+                RoundedRectangle(cornerRadius: 26 * scale, style: .continuous)
+                    .fill(Color.white.opacity(0.14))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 26 * scale, style: .continuous)
+                            .stroke(Color.white.opacity(0.28), lineWidth: 1)
+                    )
+            )
         }
         .disabled(isDisabled)
         .opacity(isDisabled ? 0.7 : 1)

@@ -426,6 +426,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				H5_PAYMENT_AUTH_PATH = /H5Api/authH5;
+				H5_PAYMENT_BASE_URL = "https://app.vidoogo.com/api/";
+				H5_PAYMENT_CALL_PAY = test-callpay;
+				H5_PAYMENT_MODE = test;
+				H5_PAYMENT_TEST_AUTH_PATH = /H5Api/authH5Test;
+				H5_PAYMENT_VERIFY_PATH = /H5Api/submitSuccessOrder;
 				INFOPLIST_FILE = Eula/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We use your microphone to record and send voice messages in chats.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use your photo library so you can select and upload videos in your posts.";
@@ -469,6 +475,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				H5_PAYMENT_AUTH_PATH = /H5Api/authH5;
+				H5_PAYMENT_BASE_URL = "";
+				H5_PAYMENT_CALL_PAY = "";
+				H5_PAYMENT_MODE = disabled;
+				H5_PAYMENT_TEST_AUTH_PATH = /H5Api/authH5Test;
+				H5_PAYMENT_VERIFY_PATH = /H5Api/submitSuccessOrder;
 				INFOPLIST_FILE = Eula/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We use your microphone to record and send voice messages in chats.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use your photo library so you can select and upload videos in your posts.";
