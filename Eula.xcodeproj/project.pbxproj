@@ -428,7 +428,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				H5_PAYMENT_AUTH_PATH = /H5Api/authH5;
 				H5_PAYMENT_BASE_URL = "https://app.vidoogo.com/api/";
-				H5_PAYMENT_CALL_PAY = test-callpay;
+				H5_PAYMENT_CALL_PAY = callpay;
 				H5_PAYMENT_MODE = test;
 				H5_PAYMENT_TEST_AUTH_PATH = /H5Api/authH5Test;
 				H5_PAYMENT_VERIFY_PATH = /H5Api/submitSuccessOrder;

@@ -68,7 +68,8 @@ enum AppConfig {
         guard let baseURL = h5PaymentBaseURL else {
             return nil
         }
-        return URL(string: trimmed, relativeTo: baseURL)?.absoluteURL
+        let normalizedPath = trimmed.hasPrefix("/") ? String(trimmed.dropFirst()) : trimmed
+        return baseURL.appendingPathComponent(normalizedPath)
     }
 
 }

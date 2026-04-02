@@ -32,7 +32,9 @@ actor H5PaymentService {
 
     func fetchTopUpURL() async throws -> URL? {
         let mode = H5PaymentMode(rawValue: AppConfig.h5PaymentModeRawValue) ?? .disabled
+        log("fetchTopUpURL started, mode=\(mode.rawValue)")
         guard let endpoint = endpoint(for: mode) else {
+            log("fetchTopUpURL skipped because endpoint is unavailable")
             return nil
         }
 
@@ -42,29 +44,41 @@ actor H5PaymentService {
         )
 
         guard response.code == 200, let rawURL = response.data?.trimmingCharacters(in: .whitespacesAndNewlines), !rawURL.isEmpty else {
+            log("fetchTopUpURL failed, code=\(response.code), message=\(response.resolvedMessage)")
             throw H5PaymentError.authFailed(response.resolvedMessage)
         }
 
-        guard let url = URL(string: rawURL) else {
+        let normalizedURLString = await normalizedTopUpURLString(from: rawURL, mode: mode)
+        guard let url = URL(string: normalizedURLString) else {
+            log("fetchTopUpURL returned invalid url: \(rawURL)")
             throw H5PaymentError.invalidEntryURL
         }
+        if normalizedURLString != rawURL {
+            log("fetchTopUpURL normalized url from \(rawURL) to \(normalizedURLString)")
+        }
+        log("fetchTopUpURL succeeded, url=\(url.absoluteString)")
         return url
     }
 
     func submitSuccessfulOrder(transactionID: String, receiptData: String?) async throws {
         let mode = H5PaymentMode(rawValue: AppConfig.h5PaymentModeRawValue) ?? .disabled
+        log("submitSuccessfulOrder started, mode=\(mode.rawValue), transactionID=\(transactionID)")
         guard mode != .disabled else {
+            log("submitSuccessfulOrder skipped because H5 mode is disabled")
             return
         }
         guard let endpoint = AppConfig.h5PaymentVerifyURL else {
+            log("submitSuccessfulOrder skipped because verify endpoint is unavailable")
             return
         }
 
         let request = buildVerifyRequest(transactionID: transactionID, receiptData: receiptData)
         let response: H5PaymentResponse<String> = try await sendRequest(to: endpoint, body: request)
         guard response.code == 200 else {
+            log("submitSuccessfulOrder failed, code=\(response.code), message=\(response.resolvedMessage)")
             throw H5PaymentError.verificationFailed(response.resolvedMessage)
         }
+        log("submitSuccessfulOrder succeeded, transactionID=\(transactionID)")
     }
 
     private func endpoint(for mode: H5PaymentMode) -> URL? {
@@ -88,13 +102,16 @@ actor H5PaymentService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         let encodedBody = try JSONEncoder().encode(body)
+        logRequest(url: url, body: body, encodedBody: encodedBody)
         request.httpBody = try encryptedBodyData(from: encodedBody)
 
         let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse else {
+            log("request failed because response is not HTTP, url=\(url.absoluteString)")
             throw H5PaymentError.invalidResponse
         }
         let responseData = try decodedResponseData(from: data)
+        logResponse(url: url, statusCode: httpResponse.statusCode, rawData: data, decodedData: responseData)
         guard (200 ... 299).contains(httpResponse.statusCode) else {
             if let apiResponse = try? JSONDecoder().decode(H5PaymentResponse<String>.self, from: responseData) {
                 throw H5PaymentError.verificationFailed(apiResponse.resolvedMessage)
@@ -117,8 +134,10 @@ actor H5PaymentService {
               let encryptedString = H5PaymentCrypto.encrypt(jsonString, secretKey: H5PaymentCryptoConfig.secretKey),
               let encryptedData = encryptedString.data(using: .utf8)
         else {
+            log("request encryption failed")
             throw H5PaymentError.invalidResponse
         }
+        log("request encryption succeeded, encryptedLength=\(encryptedData.count)")
         return encryptedData
     }
 
@@ -141,8 +160,10 @@ actor H5PaymentService {
               let decryptedString = H5PaymentCrypto.decrypt(encryptedString, secretKey: H5PaymentCryptoConfig.secretKey),
               let decryptedData = decryptedString.data(using: .utf8)
         else {
+            log("response used plain payload or decryption was skipped")
             return data
         }
+        log("response decryption succeeded, decryptedLength=\(decryptedData.count)")
         return decryptedData
     }
 
@@ -183,6 +204,75 @@ actor H5PaymentService {
 
     private func appVersion() -> String {
         (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String) ?? "1.0.0"
+    }
+
+    private func normalizedTopUpURLString(from rawURL: String, mode: H5PaymentMode) async -> String {
+        var normalized = rawURL
+        if normalized.contains("??") {
+            normalized = normalized.replacingOccurrences(of: "??", with: "?", options: [], range: normalized.range(of: "??"))
+        }
+        if mode == .test,
+           let statusBarHeight = await statusBarHeightString(),
+           !normalized.hasSuffix(",\(statusBarHeight)")
+        {
+            normalized += ",\(statusBarHeight)"
+        }
+        return normalized
+    }
+
+    private func statusBarHeightString() async -> String? {
+        await MainActor.run {
+            let height = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .first(where: { $0.activationState == .foregroundActive })?
+                .statusBarManager?
+                .statusBarFrame.height
+                ?? UIApplication.shared.connectedScenes
+                    .compactMap { $0 as? UIWindowScene }
+                    .first?
+                    .statusBarManager?
+                    .statusBarFrame.height
+                ?? 0
+
+            guard height > 0 else {
+                return nil
+            }
+
+            let roundedHeight = Int(height.rounded())
+            return String(roundedHeight)
+        }
+    }
+
+    private func logRequest<Body: Encodable>(url: URL, body: Body, encodedBody: Data) {
+        let bodyDescription = debugJSONString(from: body) ?? String(data: encodedBody, encoding: .utf8) ?? "<unavailable>"
+        log("request url=\(url.absoluteString)")
+        log("request body=\(bodyDescription)")
+    }
+
+    private func logResponse(url: URL, statusCode: Int, rawData: Data, decodedData: Data) {
+        let rawString = String(data: rawData, encoding: .utf8) ?? "<binary>"
+        let decodedString = String(data: decodedData, encoding: .utf8) ?? "<binary>"
+        log("response url=\(url.absoluteString), statusCode=\(statusCode)")
+        log("response raw=\(rawString)")
+        log("response decoded=\(decodedString)")
+    }
+
+    private func debugJSONString<Value: Encodable>(from value: Value) -> String? {
+        guard let data = try? JSONEncoder().encode(value),
+              let object = try? JSONSerialization.jsonObject(with: data),
+              JSONSerialization.isValidJSONObject(object),
+              let prettyData = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
+              let string = String(data: prettyData, encoding: .utf8)
+        else {
+            return nil
+        }
+        return string
+    }
+
+    private func log(_ message: String) {
+        #if DEBUG
+        print("[H5Payment] \(message)")
+        #endif
     }
 }
 

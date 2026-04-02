@@ -35,12 +35,15 @@ actor WalletIAPService {
     func loadProducts(productIDs: [String]) async throws -> [Product] {
         let ids = Array(Set(productIDs.filter { !$0.isEmpty }))
         guard !ids.isEmpty else { return [] }
+        log("loadProducts requested ids=\(ids.joined(separator: ", "))")
         let products = try await Product.products(for: ids)
+        log("loadProducts loaded product ids=\(products.map(\.id).joined(separator: ", "))")
         cachedProducts = Dictionary(uniqueKeysWithValues: products.map { ($0.id, $0) })
         return productIDs.compactMap { cachedProducts[$0] }
     }
 
     func purchase(productID: String) async throws {
+        log("purchase started productID=\(productID)")
         let product = try await resolveProduct(productID: productID)
         let result = try await product.purchase()
         switch result {
@@ -64,25 +67,38 @@ actor WalletIAPService {
                 throw WalletIAPError.creditingFailed
             }
             await transaction.finish()
+            log("purchase finished successfully productID=\(productID)")
         case .pending:
+            log("purchase pending productID=\(productID)")
             throw WalletIAPError.pending
         case .userCancelled:
+            log("purchase cancelled productID=\(productID)")
             throw WalletIAPError.userCancelled
         @unknown default:
+            log("purchase failed with unknown result productID=\(productID)")
             throw WalletIAPError.verificationFailed
         }
     }
 
     private func resolveProduct(productID: String) async throws -> Product {
         if let cached = cachedProducts[productID] {
+            log("resolveProduct hit cache productID=\(productID)")
             return cached
         }
-        let products = try await Product.products(for: [productID])
-        guard let product = products.first else {
-            throw WalletIAPError.productNotFound
+        log("resolveProduct fetching from StoreKit productID=\(productID)")
+        do {
+            let products = try await Product.products(for: [productID])
+            log("resolveProduct fetched StoreKit ids=\(products.map(\.id).joined(separator: ", "))")
+            guard let product = products.first else {
+                log("resolveProduct no StoreKit product returned for productID=\(productID)")
+                throw WalletIAPError.productNotFound
+            }
+            cachedProducts[productID] = product
+            return product
+        } catch {
+            log("resolveProduct StoreKit request failed productID=\(productID), error=\(error.localizedDescription)")
+            throw error
         }
-        cachedProducts[productID] = product
-        return product
     }
 
     private func verify<T>(_ result: VerificationResult<T>) throws -> T {
@@ -92,5 +108,11 @@ actor WalletIAPService {
         case .unverified:
             throw WalletIAPError.verificationFailed
         }
+    }
+
+    private func log(_ message: String) {
+        #if DEBUG
+        print("[WalletIAP] \(message)")
+        #endif
     }
 }

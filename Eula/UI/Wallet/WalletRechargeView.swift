@@ -83,23 +83,17 @@ struct WalletRechargeView: View {
                                 }
                             }
 
-                            if let h5EntryURL {
+                            if isH5Enabled {
                                 WalletSecondaryButton(
                                     scale: scale,
                                     title: webRechargeTitle,
-                                    isLoading: false,
-                                    isDisabled: false
+                                    isLoading: isLoadingH5Entry,
+                                    isDisabled: isLoadingH5Entry
                                 ) {
-                                    presentedH5Session = H5TopUpSession(url: h5EntryURL)
+                                    Task {
+                                        await openH5TopUp()
+                                    }
                                 }
-                            } else if isLoadingH5Entry {
-                                WalletSecondaryButton(
-                                    scale: scale,
-                                    title: "Preparing web recharge...",
-                                    isLoading: true,
-                                    isDisabled: true,
-                                    action: {}
-                                )
                             }
 
                             VStack(spacing: 10 * scale) {
@@ -173,6 +167,10 @@ struct WalletRechargeView: View {
         AppConfig.h5PaymentModeRawValue == "test" ? "Open web recharge test" : "Open web recharge"
     }
 
+    private var isH5Enabled: Bool {
+        AppConfig.h5PaymentModeRawValue != "disabled"
+    }
+
     @MainActor
     private func loadProductsIfNeeded() async {
         if isLoadingProducts {
@@ -232,6 +230,10 @@ struct WalletRechargeView: View {
 
     @MainActor
     private func loadH5EntryIfNeeded(force: Bool = false) async {
+        guard isH5Enabled else {
+            h5EntryURL = nil
+            return
+        }
         if isLoadingH5Entry {
             return
         }
@@ -245,6 +247,22 @@ struct WalletRechargeView: View {
             h5EntryURL = try await H5PaymentService.shared.fetchTopUpURL()
         } catch {
             h5EntryURL = nil
+        }
+    }
+
+    @MainActor
+    private func openH5TopUp() async {
+        if let h5EntryURL {
+            presentedH5Session = H5TopUpSession(url: h5EntryURL)
+            return
+        }
+
+        await loadH5EntryIfNeeded(force: true)
+
+        if let h5EntryURL {
+            presentedH5Session = H5TopUpSession(url: h5EntryURL)
+        } else {
+            ToastManager.shared.show("Failed to load web recharge")
         }
     }
 
