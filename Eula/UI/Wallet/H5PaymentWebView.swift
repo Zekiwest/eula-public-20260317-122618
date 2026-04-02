@@ -160,6 +160,10 @@ private struct H5PaymentWebView: UIViewRepresentable {
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             let bodyDescription = describe(body: message.body)
             log("received bridge message [\(message.name)]: \(bodyDescription)")
+            let configuredListener = AppConfig.h5PaymentCallPay.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !configuredListener.isEmpty && message.name == configuredListener {
+                log("configured payment listener executed: \(configuredListener)")
+            }
             guard let request = paymentRequest(from: message.body) else {
                 log("bridge message ignored because product id was not found")
                 Task { @MainActor in
