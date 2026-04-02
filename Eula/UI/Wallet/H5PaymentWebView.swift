@@ -178,21 +178,9 @@ private struct H5PaymentWebView: UIViewRepresentable {
 
         private func handlePurchaseRequest(_ request: H5NativePurchaseRequest, source: String) async {
             log("purchase request from \(source), rawProductID=\(request.rawProductID), mappedProductID=\(request.productID)")
-            do {
-                try await WalletIAPService.shared.purchase(productID: request.productID)
-                log("native purchase succeeded for mappedProductID=\(request.productID)")
-                await MainActor.run {
-                    ToastManager.shared.show("Payment succeeded")
-                }
-                await notifyH5(success: true, productID: request.rawProductID, message: "success")
-                await reloadH5()
-            } catch {
-                let supportedProducts = MockWallet.rechargeOptions.map(\.productID).joined(separator: ", ")
-                log("native purchase failed for rawProductID=\(request.rawProductID), mappedProductID=\(request.productID), error=\(error.localizedDescription), supportedProducts=\(supportedProducts)")
-                await MainActor.run {
-                    ToastManager.shared.show("Payment failed: \(request.rawProductID)")
-                }
-                await notifyH5(success: false, productID: request.rawProductID, message: error.localizedDescription)
+            
+            await MainActor.run {
+                StoreKitManager.shared.purchaseProduct(productId: request.productID)
             }
         }
 

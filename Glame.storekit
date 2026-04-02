@@ -1,0 +1,132 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "5A3274C4",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "3.99",
+      "familyShareable" : false,
+      "internalID" : "6760656724",
+      "localizations" : [
+        {
+          "description" : "Purchase 28 points to unlock advanced functions",
+          "displayName" : "p028",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "com.eula.stars.p028",
+      "referenceName" : "p028",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "6760657248",
+      "localizations" : [
+        {
+          "description" : "Purchase 66 points to unlock advanced functions",
+          "displayName" : "p066",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "com.eula.stars.p066",
+      "referenceName" : "p066",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "19.99",
+      "familyShareable" : false,
+      "internalID" : "6760657582",
+      "localizations" : [
+        {
+          "description" : "Purchase 150 points to unlock advanced functions",
+          "displayName" : "p150",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "com.eula.stars.p150",
+      "referenceName" : "p150",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "39.99",
+      "familyShareable" : false,
+      "internalID" : "6760657940",
+      "localizations" : [
+        {
+          "description" : "Purchase 330 points to unlock advanced functions",
+          "displayName" : "p330",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "com.eula.stars.p330",
+      "referenceName" : "p330",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "59.99",
+      "familyShareable" : false,
+      "internalID" : "6760657926",
+      "localizations" : [
+        {
+          "description" : "Purchase 530 points to unlock advanced functions",
+          "displayName" : "p530",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "com.eula.stars.p530",
+      "referenceName" : "p530",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "99.99",
+      "familyShareable" : false,
+      "internalID" : "6760657999",
+      "localizations" : [
+        {
+          "description" : "Purchase 950 points to unlock advanced functions",
+          "displayName" : "p950",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "com.eula.stars.p950",
+      "referenceName" : "p950",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6760302038",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "H5S7NDJ9Q8",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 796821258.54119802,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

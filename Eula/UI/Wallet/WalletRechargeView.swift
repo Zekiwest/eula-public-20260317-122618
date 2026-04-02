@@ -178,11 +178,14 @@ struct WalletRechargeView: View {
         }
         isLoadingProducts = true
         defer { isLoadingProducts = false }
-        do {
-            let productIDs = options.map(\.productID)
-            let products = try await WalletIAPService.shared.loadProducts(productIDs: productIDs)
-            productPriceByID = Dictionary(uniqueKeysWithValues: products.map { ($0.id, $0.displayPrice) })
-        } catch {
+        
+        let productIDs = Set(options.map(\.productID))
+        await StoreKitManager.shared.fetchProducts(productIds: productIDs)
+        
+        let products = StoreKitManager.shared.products
+        productPriceByID = Dictionary(uniqueKeysWithValues: products.map { ($0.id, $0.displayPrice) })
+        
+        if products.isEmpty {
             ToastManager.shared.show("Failed to load in-app purchase products")
         }
     }
@@ -194,23 +197,9 @@ struct WalletRechargeView: View {
         }
         isPurchasing = true
         defer { isPurchasing = false }
+        
         let selectedOption = options[selectedOptionIndex]
-        do {
-            try await WalletIAPService.shared.purchase(productID: selectedOption.productID)
-            ToastManager.shared.show("Top-up successful")
-            await loadCoinsIfNeeded()
-        } catch WalletIAPError.userCancelled {
-        } catch WalletIAPError.pending {
-            ToastManager.shared.show("Payment is pending")
-        } catch WalletIAPError.productNotFound {
-            ToastManager.shared.show("Product unavailable")
-        } catch WalletIAPError.paymentValidationFailed {
-            ToastManager.shared.show("Payment completed but server validation failed")
-        } catch WalletIAPError.creditingFailed {
-            ToastManager.shared.show("Payment verified but crediting failed, please try again")
-        } catch {
-            ToastManager.shared.show("Top-up failed, please try again later")
-        }
+        StoreKitManager.shared.purchaseProduct(productId: selectedOption.productID)
     }
 
     @MainActor

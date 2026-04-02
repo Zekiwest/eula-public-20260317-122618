@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4E919F862F691529007EB6D3 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E919F852F691529007EB6D3 /* StoreKit.framework */; };
+		C4C8D3762F7E870200F889E1 /* Glame.storekit in Resources */ = {isa = PBXBuildFile; fileRef = C4C8D3752F7E870200F889E1 /* Glame.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +33,7 @@
 		4EA481042F3D96E7007D91EA /* Eula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EA481162F3D96E7007D91EA /* EulaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EulaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EA481202F3D96E8007D91EA /* EulaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EulaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4C8D3752F7E870200F889E1 /* Glame.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Glame.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -102,6 +104,7 @@
 		4EA480FB2F3D96E7007D91EA = {
 			isa = PBXGroup;
 			children = (
+				C4C8D3752F7E870200F889E1 /* Glame.storekit */,
 				4EA481062F3D96E7007D91EA /* Eula */,
 				4EA481192F3D96E7007D91EA /* EulaTests */,
 				4EA481232F3D96E8007D91EA /* EulaUITests */,
@@ -240,6 +243,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4C8D3762F7E870200F889E1 /* Glame.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +428,7 @@
 				CHAT_MESSAGE_COST_COINS = 30;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H5S7NDJ9Q8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				H5_PAYMENT_AUTH_PATH = /H5Api/authH5;
@@ -473,6 +478,7 @@
 				CHAT_MESSAGE_COST_COINS = 30;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H5S7NDJ9Q8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				H5_PAYMENT_AUTH_PATH = /H5Api/authH5;
