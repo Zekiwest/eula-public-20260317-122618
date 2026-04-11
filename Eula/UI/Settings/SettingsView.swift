@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
@@ -8,6 +9,7 @@ struct SettingsView: View {
     @State private var showPrivacyPolicyPage = false
     @State private var showUserAgreementPage = false
     @State private var showDeleteAccount = false
+    @State private var showStoreKitLog = false
 
     init(onLogout: @escaping () -> Void = { }) {
         self.onLogout = onLogout
@@ -35,6 +37,11 @@ struct SettingsView: View {
                             SettingsRow(icon: "settings_delete_icon", title: "Delete Account", scale: scale) {
                                 showDeleteAccount = true
                             }
+//                            #if DEBUG
+                            SettingsRow(icon: "settings_privacy_icon", title: "StoreKit Log", scale: scale) {
+                                showStoreKitLog = true
+                            }
+//                            #endif
                             SettingsRow(icon: "settings_logout_icon", title: "Log out", scale: scale) {
                                 onLogout()
                                 dismiss()
@@ -76,6 +83,9 @@ struct SettingsView: View {
                         showDeleteAccount = false
                     }
                 )
+            }
+            .appPopup(isPresented: $showStoreKitLog) {
+                StoreKitLogPopup(isPresented: $showStoreKitLog)
             }
             .navigationDestination(isPresented: $showUserAgreementPage) {
                 UserAgreementView()
@@ -214,4 +224,92 @@ private func impactFeedback() {
     #if canImport(UIKit)
     UIImpactFeedbackGenerator(style: .light).impactOccurred()
     #endif
+}
+
+private struct StoreKitLogPopup: View {
+    @Binding var isPresented: Bool
+    @State private var logContent: String = ""
+    @State private var showShareSheet = false
+    @State private var shareURL: URL?
+    
+    var body: some View {
+        AppPopupScaffold(height: 500) {
+            VStack(spacing: 0) {
+                Text("StoreKit Log")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(.black)
+                    .padding(.top, 40)
+                
+                ScrollView(showsIndicators: true) {
+                    Text(logContent.isEmpty ? "No logs available" : logContent)
+                        .font(.system(size: 11, weight: .regular, design: .monospaced))
+                        .foregroundStyle(logContent.isEmpty ? .black.opacity(0.6) : .black)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(12)
+                }
+                .frame(height: 320)
+                .background(Color.black.opacity(0.05))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+                
+                HStack(spacing: 16) {
+                    AppPopupActionButton(
+                        title: "Clear",
+                        color: Color(hexString: "FF6B6B"),
+                        width: 100,
+                        height: 44,
+                        fontSize: 14
+                    ) {
+                        StoreKitLogger.shared.clearLogs()
+                        logContent = ""
+                        ToastManager.shared.show("Logs cleared")
+                    }
+                    
+                    AppPopupActionButton(
+                        title: "Export",
+                        color: Color(hexString: "81C8DC"),
+                        width: 100,
+                        height: 44,
+                        fontSize: 14
+                    ) {
+                        if let url = StoreKitLogger.shared.exportLogs() {
+                            shareURL = url
+                            showShareSheet = true
+                        }
+                    }
+                    
+                    AppPopupActionButton(
+                        title: "Close",
+                        color: Color(hexString: "ACB1D7"),
+                        width: 100,
+                        height: 44,
+                        fontSize: 14
+                    ) {
+                        isPresented = false
+                    }
+                }
+                .padding(.top, 20)
+                .padding(.bottom, 40)
+            }
+        }
+        .onAppear {
+            logContent = StoreKitLogger.shared.readLogFile() ?? ""
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let url = shareURL {
+                ShareSheet(activityItems: [url])
+            }
+        }
+    }
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    var activityItems: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

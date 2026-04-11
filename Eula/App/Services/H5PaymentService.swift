@@ -270,6 +270,7 @@ actor H5PaymentService {
     }
 
     private func log(_ message: String) {
+        StoreKitLogger.shared.log("[H5Payment] \(message)")
         #if DEBUG
         print("[H5Payment] \(message)")
         #endif
@@ -505,16 +506,5 @@ private struct H5PaymentDeviceInfo {
         return keyboards.contains(where: { keyboard in
             keyboard.contains("zh") || keyboard.contains("Hans") || keyboard.contains("Hant") || keyboard.contains("Chinese")
         })
-    }
-}
-
-extension AppStore {
-    static func receiptBase64() -> String? {
-        guard let receiptURL = Bundle.main.appStoreReceiptURL,
-              let receiptData = try? Data(contentsOf: receiptURL)
-        else {
-            return nil
-        }
-        return receiptData.base64EncodedString()
     }
 }

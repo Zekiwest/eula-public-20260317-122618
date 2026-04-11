@@ -131,8 +131,11 @@ class StoreKitManager: ObservableObject {
     func fetchProducts(productIds: Set<String>) async {
         guard !productIds.isEmpty else {
             errorMessage = "产品 ID 列表为空"
+            StoreKitLogger.shared.warning("fetchProducts: 产品 ID 列表为空")
             return
         }
+        
+        StoreKitLogger.shared.info("fetchProducts: 开始获取产品，IDs: \(productIds.sorted())")
         
         isLoading = true
         errorMessage = nil
@@ -141,9 +144,21 @@ class StoreKitManager: ObservableObject {
             let storeProducts = try await Product.products(for: productIds)
             products = storeProducts.map { IAPProduct(product: $0) }
             isLoading = false
+            
+            StoreKitLogger.shared.success("fetchProducts: 成功获取 \(products.count) 个产品")
+            for product in products {
+                StoreKitLogger.shared.debug("  - \(product.id): \(product.localizedTitle) @ \(product.displayPrice)")
+            }
+            
+            let missingProductIds = productIds.subtracting(Set(products.map(\.id)))
+            if !missingProductIds.isEmpty {
+                StoreKitLogger.shared.warning("fetchProducts: 以下产品 ID 未找到: \(missingProductIds.sorted())")
+            }
         } catch {
             errorMessage = "获取产品失败: \(error.localizedDescription)"
             isLoading = false
+            StoreKitLogger.shared.error("fetchProducts: 获取产品失败 - \(error.localizedDescription)")
+            StoreKitLogger.shared.error("fetchProducts: 错误详情 - \(error)")
         }
     }
     
@@ -157,18 +172,23 @@ class StoreKitManager: ObservableObject {
                     return
                 }
 
+                StoreKitLogger.shared.info("开始购买: \(productId)")
                 print("💰 开始购买: \(productId) ")
 
                 let transaction = try await self.purchase(product: iapProduct)
 
                 await handlePurchaseSuccess(transaction)
-
+                StoreKitLogger.shared.debug("transaction.id: \(transaction.id)")
+                StoreKitLogger.shared.debug("transaction.id.description: \(transaction.id.description)")
+                StoreKitLogger.shared.success("购买成功 - Transaction ID: \(transaction.id.description)")
                 print("✅ 购买成功 - Transaction ID: \(transaction.id)")
 
             } catch let error as StoreError {
+                StoreKitLogger.shared.error("购买失败: \(error.localizedDescription)")
                 print("❌ 购买失败: \(error.localizedDescription)")
                 onPurchaseFailure?(error)
             } catch {
+                StoreKitLogger.shared.error("购买失败: \(error.localizedDescription)")
                 print("❌ 购买失败: \(error.localizedDescription)")
                 onPurchaseFailure?(error)
             }
@@ -188,6 +208,7 @@ class StoreKitManager: ObservableObject {
 
             let originalID = String(transaction.originalID)
 
+            StoreKitLogger.shared.info("handlePurchaseSuccess transactionID=\(transactionID), originalID=\(originalID), hasReceipt=\(receiptData != nil), environment=\(transaction.environment.rawValue)")
             print("[StoreKit] handlePurchaseSuccess transactionID=\(transactionID), originalID=\(originalID), hasReceipt=\(receiptData != nil), environment=\(transaction.environment.rawValue)")
 
             do {
@@ -196,6 +217,7 @@ class StoreKitManager: ObservableObject {
                     receiptData: receiptData
                 )
             } catch {
+                StoreKitLogger.shared.error("payment validation failed: \(error.localizedDescription)")
                 print("[StoreKit] payment validation failed: \(error.localizedDescription)")
                 ToastManager.shared.show("Payment completed but server validation failed")
                 return
@@ -209,14 +231,17 @@ class StoreKitManager: ObservableObject {
                 )
                 ToastManager.shared.show("Top-up successful")
             } catch {
+                StoreKitLogger.shared.error("crediting failed: \(error.localizedDescription)")
                 print("[StoreKit] crediting failed: \(error.localizedDescription)")
                 ToastManager.shared.show("Payment verified but crediting failed")
                 return
             }
-
+            
             print("[StoreKit] purchase finished successfully")
+            StoreKitLogger.shared.success("purchase finished successfully")
 
         } catch {
+            StoreKitLogger.shared.error("handlePurchaseSuccess failed: \(error.localizedDescription)")
             print("[StoreKit] handlePurchaseSuccess failed: \(error.localizedDescription)")
         }
     }
@@ -369,6 +394,7 @@ class StoreKitManager: ObservableObject {
                     // 完成交易
                     await transaction.finish()
                 } catch {
+                    StoreKitLogger.shared.error("交易验证失败: \(error)")
                     print("交易验证失败: \(error)")
                 }
             }
@@ -425,6 +451,18 @@ enum StoreError: LocalizedError {
         case .unknown:
             return "未知错误"
         }
+    }
+}
+
+// MARK: - Receipt
+
+extension AppStore {
+    static func receiptBase64() -> String? {
+        guard let url = Bundle.main.appStoreReceiptURL,
+              let data = try? Data(contentsOf: url) else {
+            return nil
+        }
+        return data.base64EncodedString()
     }
 }
 
