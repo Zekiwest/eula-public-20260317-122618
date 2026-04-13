@@ -14,6 +14,8 @@
 	<string>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1YXFmcnl4d2FjaXFlemdmZ3FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYzODA4MDEsImV4cCI6MjA4MTk1NjgwMX0.gliEd8kAC9Yg3atpKkwG1X7VSW6AWK-gGbr_VnVtfrI</string>
 	<key>CHAT_MESSAGE_COST_COINS</key>
 	<integer>30</integer>
+	<key>APNS_DEVICE_TOKEN_PATH</key>
+	<string>$(APNS_DEVICE_TOKEN_PATH)</string>
 	<key>H5_PAYMENT_AUTH_PATH</key>
 	<string>$(H5_PAYMENT_AUTH_PATH)</string>
 	<key>H5_PAYMENT_BASE_URL</key>

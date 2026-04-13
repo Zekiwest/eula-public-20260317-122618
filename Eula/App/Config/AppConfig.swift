@@ -56,6 +56,10 @@ enum AppConfig {
         configuredH5URL(forInfoDictionaryKey: "H5_PAYMENT_VERIFY_PATH", defaultPath: "/H5Api/submitSuccessOrder")
     }
 
+    static var apnsDeviceTokenURL: URL? {
+        configuredH5URL(forInfoDictionaryKey: "APNS_DEVICE_TOKEN_PATH", defaultPath: "/apns/device/token")
+    }
+
     private static func configuredH5URL(forInfoDictionaryKey key: String, defaultPath: String) -> URL? {
         let rawValue = (Bundle.main.object(forInfoDictionaryKey: key) as? String) ?? defaultPath
         let trimmed = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
