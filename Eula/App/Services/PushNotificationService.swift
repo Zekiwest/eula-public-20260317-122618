@@ -114,14 +114,26 @@ final class PushNotificationService {
                 return
             }
 
-            let apiResponse = try JSONDecoder().decode(APNSDeviceTokenResponse.self, from: data)
-            guard apiResponse.isSuccess else {
-                log("APNs token upload was rejected: \(apiResponse.resolvedMessage)")
-                return
-            }
+            do {
+                let apiResponse = try JSONDecoder().decode(APNSDeviceTokenResponse.self, from: data)
+                guard apiResponse.isSuccess else {
+                    log("APNs token upload was rejected: \(apiResponse.resolvedMessage)")
+                    return
+                }
 
-            _ = KeychainHelper.saveString(token, service: tokenStorageService, account: uploadedTokenAccount)
-            log("APNs token upload succeeded")
+                _ = KeychainHelper.saveString(token, service: tokenStorageService, account: uploadedTokenAccount)
+                log("APNs token upload succeeded")
+            } catch {
+                if let responseString = try? JSONDecoder().decode(String.self, from: data),
+                   !responseString.isEmpty {
+                    _ = KeychainHelper.saveString(token, service: tokenStorageService, account: uploadedTokenAccount)
+                    log("APNs token upload succeeded (string response)")
+                } else {
+                    log("APNs token response decode failed: \(error.localizedDescription)")
+                    log("APNs token response decode error: \(error)")
+                    log("APNs token response raw data: \(responseBody)")
+                }
+            }
         } catch {
             log("APNs token upload failed: \(error.localizedDescription)")
         }
@@ -144,11 +156,12 @@ private struct APNSDeviceTokenResponse: Decodable {
     let code: Int?
     let msg: String?
     let message: String?
-
+    let data: String?
+    
     var isSuccess: Bool {
         code == 0 || code == 200
     }
-
+    
     var resolvedMessage: String {
         if let message, !message.isEmpty {
             return message
