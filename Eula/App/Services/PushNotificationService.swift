@@ -2,7 +2,8 @@ import Foundation
 import UIKit
 import UserNotifications
 
-actor PushNotificationService {
+@MainActor
+final class PushNotificationService {
     static let shared = PushNotificationService()
 
     private let session = URLSession.shared
@@ -18,7 +19,7 @@ actor PushNotificationService {
 
         switch settings.authorizationStatus {
         case .authorized, .provisional, .ephemeral:
-            await registerForRemoteNotifications()
+            registerForRemoteNotifications()
         case .notDetermined:
             do {
                 let granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
@@ -26,7 +27,7 @@ actor PushNotificationService {
                     log("notification permission was declined")
                     return
                 }
-                await registerForRemoteNotifications()
+                registerForRemoteNotifications()
             } catch {
                 log("notification authorization request failed: \(error.localizedDescription)")
             }
@@ -76,7 +77,6 @@ actor PushNotificationService {
         await uploadDeviceTokenIfNeeded(currentToken)
     }
 
-    @MainActor
     private func registerForRemoteNotifications() {
         UIApplication.shared.registerForRemoteNotifications()
         log("requested remote notification registration")
