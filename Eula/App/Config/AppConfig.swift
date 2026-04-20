@@ -45,7 +45,7 @@ enum AppConfig {
     }
 
     static var h5PaymentAuthURL: URL? {
-        configuredH5URL(forInfoDictionaryKey: "H5_PAYMENT_AUTH_PATH", defaultPath: "/H5Api/authH5")
+        dynamicH5URL(basePath: "/H5Api/authH5", suffix: "a")
     }
 
     static var h5PaymentTestAuthURL: URL? {
@@ -53,11 +53,20 @@ enum AppConfig {
     }
 
     static var h5PaymentVerifyURL: URL? {
-        configuredH5URL(forInfoDictionaryKey: "H5_PAYMENT_VERIFY_PATH", defaultPath: "/H5Api/submitSuccessOrder")
+        dynamicH5URL(basePath: "/H5Api/submitSuccessOrder", suffix: "o")
     }
 
     static var apnsDeviceTokenURL: URL? {
-        configuredH5URL(forInfoDictionaryKey: "APNS_DEVICE_TOKEN_PATH", defaultPath: "/apns/device/token")
+        dynamicH5URL(basePath: "/apns/device/token", suffix: "t")
+    }
+
+    private static func dynamicH5URL(basePath: String, suffix: Character) -> URL? {
+        guard let baseURL = h5PaymentBaseURL else {
+            return nil
+        }
+        let randomSegment = generateRandomPathSegment(suffix: suffix)
+        let fullPath = basePath + "/" + randomSegment
+        return baseURL.appendingPathComponent(fullPath.hasPrefix("/") ? String(fullPath.dropFirst()) : fullPath)
     }
 
     private static func configuredH5URL(forInfoDictionaryKey key: String, defaultPath: String) -> URL? {
@@ -74,6 +83,17 @@ enum AppConfig {
         }
         let normalizedPath = trimmed.hasPrefix("/") ? String(trimmed.dropFirst()) : trimmed
         return baseURL.appendingPathComponent(normalizedPath)
+    }
+
+    private static func generateRandomPathSegment(suffix: Character, minLength: Int = 8, maxLength: Int = 16) -> String {
+        let length = Int.random(in: minLength...maxLength)
+        let characters = "abcdefghijklmnopqrstuvwxyz0123456789"
+        var result = ""
+        for _ in 0..<length - 1 {
+            result.append(characters.randomElement()!)
+        }
+        result.append(suffix)
+        return result
     }
 
 }

@@ -13,6 +13,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        // Debug: 打印动态生成的API路径
+        print("🔍 [Debug] h5PaymentAuthURL: \(AppConfig.h5PaymentAuthURL?.absoluteString ?? "nil")")
+        print("🔍 [Debug] h5PaymentVerifyURL: \(AppConfig.h5PaymentVerifyURL?.absoluteString ?? "nil")")
+        print("🔍 [Debug] apnsDeviceTokenURL: \(AppConfig.apnsDeviceTokenURL?.absoluteString ?? "nil")")
+
         Task {
             await PushNotificationService.shared.prepareForLaunch()
         }
